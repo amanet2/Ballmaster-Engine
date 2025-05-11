@@ -7,7 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class schedulerImpl implements scheduler {
-    ConcurrentHashMap<String, Queue<doableImpl>> events;
+    //TODO: handle overlap of events that share the timestamp key in events in the toRemove list
+    ConcurrentHashMap<Long, Queue<doableImpl>> events;
     ConcurrentLinkedQueue<doableImpl> doNowEventsQueue;
 
     public schedulerImpl() {
@@ -16,15 +17,14 @@ public class schedulerImpl implements scheduler {
     }
 
     public synchronized void doEvents(long gameTime) {
-        long gtime = gameTime;
-        ArrayList<String> toRemoveIds = new ArrayList<>();
-        for (String eventDoAtTime : events.keySet()) {
-            if (Long.parseLong(eventDoAtTime) > gtime)
+        ArrayList<Long> toRemoveIds = new ArrayList<>();
+        for (Long eventDoAtTime : events.keySet()) {
+            if (eventDoAtTime > gameTime)
                 continue;
             doNowEventsQueue.addAll(events.get(eventDoAtTime));
             toRemoveIds.add(eventDoAtTime);
         }
-        for(String timeStampKey : toRemoveIds) {
+        for(Long timeStampKey : toRemoveIds) {
             events.remove(timeStampKey);
         }
         while (!doNowEventsQueue.isEmpty()) { //TODO: crash here when queue.remove() is null
@@ -34,7 +34,7 @@ public class schedulerImpl implements scheduler {
         }
     }
 
-    public synchronized void putEvent(String eventDoAtTime, doableImpl event) {
+    public synchronized void putEvent(Long eventDoAtTime, doableImpl event) {
         events.putIfAbsent(eventDoAtTime, new LinkedList<>());
         events.get(eventDoAtTime).add(event);
     }
