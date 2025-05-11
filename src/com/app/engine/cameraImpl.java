@@ -19,6 +19,10 @@ public class cameraImpl implements camera {
         this.forwardVector = 0.0;
     }
 
+    public double[] getCoords() {
+        return this.coords;
+    }
+
     public void updatePositionFree(long gameTime, int rateSimulation, int rateShell) {
         double mod = (double) rateSimulation / (double) rateShell;
         if (this.accelTick < gameTime) {
