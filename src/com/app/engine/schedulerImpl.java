@@ -12,35 +12,35 @@ public class schedulerImpl implements scheduler {
     ConcurrentLinkedQueue<doableImpl> doNowEventsQueue;
 
     public schedulerImpl() {
-        events = new ConcurrentHashMap<>();
-        doNowEventsQueue = new ConcurrentLinkedQueue<>();
+        this.events = new ConcurrentHashMap<>();
+        this.doNowEventsQueue = new ConcurrentLinkedQueue<>();
     }
 
     public synchronized void doEvents(long gameTime) {
         ArrayList<Long> toRemoveIds = new ArrayList<>();
-        for (Long eventDoAtTime : events.keySet()) {
+        for (Long eventDoAtTime : this.events.keySet()) {
             if (eventDoAtTime > gameTime)
                 continue;
-            doNowEventsQueue.addAll(events.get(eventDoAtTime));
+            this.doNowEventsQueue.addAll(this.events.get(eventDoAtTime));
             toRemoveIds.add(eventDoAtTime);
         }
         for(Long timeStampKey : toRemoveIds) {
-            events.remove(timeStampKey);
+            this.events.remove(timeStampKey);
         }
-        while (!doNowEventsQueue.isEmpty()) { //TODO: crash here when queue.remove() is null
-            doableImpl o = doNowEventsQueue.remove();
+        while (!this.doNowEventsQueue.isEmpty()) { //TODO: crash here when queue.remove() is null
+            doableImpl o = this.doNowEventsQueue.remove();
             if(o != null)
                 o.doCommand();
         }
     }
 
     public synchronized void putEvent(Long eventDoAtTime, doableImpl event) {
-        events.putIfAbsent(eventDoAtTime, new LinkedList<>());
-        events.get(eventDoAtTime).add(event);
+        this.events.putIfAbsent(eventDoAtTime, new LinkedList<>());
+        this.events.get(eventDoAtTime).add(event);
     }
 
     public synchronized void clearEvents() {
-        events.clear();
-        doNowEventsQueue.clear();
+        this.events.clear();
+        this.doNowEventsQueue.clear();
     }
 }

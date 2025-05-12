@@ -27,13 +27,13 @@ public class cameraImpl implements camera {
         double mod = (double) rateSimulation / (double) rateShell;
         if (this.accelTick < gameTime) {
             this.accelTick = gameTime;
-            vels[0] = moves[0] ? Math.min(maxVelocity, vels[0] + accelRate) : Math.max(0, vels[0] - decelRate);
-            vels[1] = moves[1] ? Math.min(maxVelocity, vels[1] + accelRate) : Math.max(0, vels[1] - decelRate);
-            vels[2] = moves[2] ? Math.min(maxVelocity, vels[2] + accelRate) : Math.max(0, vels[2] - decelRate);
-            vels[3] = moves[3] ? Math.min(maxVelocity, vels[3] + accelRate) : Math.max(0, vels[3] - decelRate);
+            this.vels[0] = this.moves[0] ? Math.min(camera.maxVelocity, this.vels[0] + camera.accelRate) : Math.max(0, this.vels[0] - camera.decelRate);
+            this.vels[1] = this.moves[1] ? Math.min(camera.maxVelocity, this.vels[1] + camera.accelRate) : Math.max(0, this.vels[1] - camera.decelRate);
+            this.vels[2] = this.moves[2] ? Math.min(camera.maxVelocity, this.vels[2] + camera.accelRate) : Math.max(0, this.vels[2] - camera.decelRate);
+            this.vels[3] = this.moves[3] ? Math.min(camera.maxVelocity, this.vels[3] + camera.accelRate) : Math.max(0, this.vels[3] - camera.decelRate);
         }
-        coords[0] += (vels[3] - vels[2]) * mod;
-        coords[1] += (vels[1] - vels[0]) * mod;
+        this.coords[0] += (this.vels[3] - this.vels[2]) * mod;
+        this.coords[1] += (this.vels[1] - this.vels[0]) * mod;
     }
 
 //    public void updatePositionTrackCoords(int[] worldCoords) {
@@ -41,8 +41,8 @@ public class cameraImpl implements camera {
 //    }
 
     public void snapToWorldCoords(int[] worldCoords) {
-        coords[0] = worldCoords[0];
-        coords[1] = worldCoords[1];
+        this.coords[0] = worldCoords[0];
+        this.coords[1] = worldCoords[1];
     }
 
 
@@ -63,6 +63,6 @@ public class cameraImpl implements camera {
 
     public void startShake(long gameTime) {
         this.isShaking = true;
-        this.shakeTick = gameTime + shakeDuration;
+        this.shakeTick = gameTime + camera.shakeDuration;
     }
 }
