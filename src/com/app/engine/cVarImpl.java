@@ -1,7 +1,5 @@
 package com.app.engine;
 
-import java.util.Objects;
-
 public class cVarImpl implements cVar {
     private String key;
     private String value;
