@@ -6,9 +6,9 @@ java_src="$engine_home/src/com/app/engine/*.java"
 jar_name="engine.jar"
 jar_out="$java_out/$jar_name"
 
-prep() {
+#prep() {
 #  rm -rf $java_out
-}
+#}
 
 build() {
   $java_bin/javac -d $java_out $java_src
@@ -20,6 +20,6 @@ cleanup() {
   rm -rf $java_out
 }
 
-prep
+#prep
 build
 cleanup
