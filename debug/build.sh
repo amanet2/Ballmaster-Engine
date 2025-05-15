@@ -7,7 +7,7 @@ jar_name="engine.jar"
 jar_out="$java_out/$jar_name"
 
 prep() {
-  rm -rf $java_out
+#  rm -rf $java_out
 }
 
 build() {
