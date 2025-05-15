@@ -7,5 +7,7 @@ public interface cVar {
 
     String getValue();
 
+    String getKey();
+
     void setValue(String newValue);
 }

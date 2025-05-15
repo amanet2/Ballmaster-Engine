@@ -17,6 +17,10 @@ public class cVarImpl implements cVar {
 
     }
 
+    public String getKey() {
+        return this.key;
+    }
+
     public String getValue() {
         return this.value;
     }
