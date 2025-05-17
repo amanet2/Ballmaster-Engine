@@ -5,7 +5,7 @@ public class cmdImpl implements cmd {
 
     }
 
-    public String doCmd(String cmdString) {
+    public String doCmd(String[] cmdArgs) {
         return "";
     }
 }
