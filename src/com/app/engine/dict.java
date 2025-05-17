@@ -2,7 +2,7 @@ package com.app.engine;
 
 import java.util.Collection;
 
-public interface state {
+public interface dict {
     /*
     * TODO: update this to use some sort of cvar-like class as value
     *  So that we can leverage onUpdate() and onChange() functionality

@@ -3,18 +3,18 @@ package com.app.engine;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class stateImpl implements state {
+public class dictImpl implements dict {
     /*
      * TODO: update this to use some sort of cvar-like class as value
      *  So that we can leverage onUpdate() and onChange() functionality
      * */
     private HashMap<String, String> internalMap;
 
-    public stateImpl() {
+    public dictImpl() {
         internalMap = new HashMap<>();
     }
 
-    public stateImpl(String stateString) {
+    public dictImpl(String stateString) {
         // e.g. {foo=bar, baz=qaz}
         internalMap = new HashMap<>();
         stateString = stateString.trim();
