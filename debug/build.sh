@@ -1,6 +1,6 @@
 engine_home="/Users/stallion/Code/Ballmaster-Engine"
 game_home="/Users/stallion/Code/Ballmaster-Game"
-java_bin="$engine_home/runtime/jdk-23.0.2.jdk/Contents/Home/bin"
+java_bin="$engine_home/runtime/jdk-24.0.1.jdk/Contents/Home/bin"
 java_out="$engine_home/tmp"
 java_src="$engine_home/src/com/app/engine/*.java"
 jar_name="engine.jar"
