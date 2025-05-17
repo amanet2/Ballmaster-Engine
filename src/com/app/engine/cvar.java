@@ -1,10 +1,10 @@
 package com.app.engine;
 
-public class cVarImpl implements cVar {
+public class cvar implements cvarI {
     private String key;
     private String value;
 
-    public cVarImpl(String key, String value) {
+    public cvar(String key, String value) {
         this.key = key;
         this.value = value;
     }

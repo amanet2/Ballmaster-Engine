@@ -1,5 +1,11 @@
 package com.app.engine;
 
-public interface cmd {
-    String doCmd(String[] cmdArgs);
+public class cmd implements cmdI {
+    public cmd() {
+
+    }
+
+    public String doCmd(String[] cmdArgs) {
+        return "";
+    }
 }

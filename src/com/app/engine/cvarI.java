@@ -1,6 +1,6 @@
 package com.app.engine;
 
-public interface cVar {
+public interface cvarI {
     void onChange();
 
     void onUpdate(); // like onChange, but called everytime a value is set
