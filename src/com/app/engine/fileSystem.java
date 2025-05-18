@@ -13,10 +13,24 @@ public class fileSystem implements fileSystemI {
             return this.fullPath;
         }
 
+        public String getFileName() {
+            return this.fileName;
+        }
+
+        public String getParentDirectory() {
+            return this.parentDirectory;
+        }
+
         public gFile(String parentDirectory, String fileName) {
             this.parentDirectory = parentDirectory;
             this.fileName = fileName;
             this.fullPath = String.format("%s/%s", this.parentDirectory, this.fileName);
+        }
+
+        public gFile(String fullPath) {
+            this.parentDirectory = fullPath.substring(0, fullPath.lastIndexOf('/'));
+            this.fileName = fullPath.substring(fullPath.lastIndexOf('/') + 1);
+            this.fullPath = fullPath;
         }
     }
 
