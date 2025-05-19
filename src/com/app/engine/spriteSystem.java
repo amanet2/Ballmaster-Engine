@@ -38,28 +38,16 @@ public class spriteSystem implements spriteSystemI {
             if(fullPath.equalsIgnoreCase("none"))
                 return null;
 
-            if(this.spriteFiles.get(fullPath) == null)
-                this.spriteFiles.put(fullPath, this.fileSystem. new gFile(fullPath));
+            this.spriteFiles.putIfAbsent(fullPath, this.fileSystem. new gFile(fullPath));
 
             gFile spriteFile = this.spriteFiles.get(fullPath);
             String spriteFileFullpath = spriteFile.getFullPath();
 
-            if(this.baseImages.get(spriteFileFullpath) == null)
-                this.baseImages.put(spriteFileFullpath, new ImageIcon(spriteFileFullpath));
+            this.baseImages.putIfAbsent(spriteFileFullpath, new ImageIcon(spriteFileFullpath));
 
             String name = String.format("%s%d%d", spriteFileFullpath, width, height);
 
-            if(this.scaledSprites.get(name) == null)
-                this.scaledSprites.put(
-                        name,
-                        new gSprite(
-                                this.baseImages.get(spriteFileFullpath).getImage().getScaledInstance(
-                                        width,
-                                        height,
-                                        Image.SCALE_FAST
-                                )
-                        )
-                );
+            this.scaledSprites.putIfAbsent(name, new gSprite(this.baseImages.get(spriteFileFullpath).getImage().getScaledInstance(width, height, Image.SCALE_FAST)));
 
             return this.scaledSprites.get(name);
         }
