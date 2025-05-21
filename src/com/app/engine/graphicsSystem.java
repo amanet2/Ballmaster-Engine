@@ -33,6 +33,7 @@ public class graphicsSystem implements graphicsSystemI {
             this.frame.setPreferredSize(new Dimension(settings.width,settings.height));
             this.frame.setContentPane(panel);
             this.frame.pack();
+            this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.frame.setVisible(true);
         }
 
