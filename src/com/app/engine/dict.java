@@ -4,10 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class dict implements dictI {
-    /*
-     * TODO: update this to use some sort of cvar-like class as value
-     *  So that we can leverage onUpdate() and onChange() functionality
-     * */
     private HashMap<String, String> internalMap;
 
     public dict() {
