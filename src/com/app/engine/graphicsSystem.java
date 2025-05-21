@@ -2,8 +2,7 @@ package com.app.engine;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class graphicsSystem implements graphicsSystemI {
     public class gPanel extends JPanel {
@@ -29,6 +28,8 @@ public class graphicsSystem implements graphicsSystemI {
         public gGraphicsSystem(gPanel panel) {
             this.frame = new JFrame("Ballmaster Engine");
             this.frame.setResizable(false);
+            this.frame.setBackground(Color.BLACK);
+            panel.setBackground(Color.BLACK);
             this.frame.setPreferredSize(new Dimension(settings.width,settings.height));
             this.frame.setContentPane(panel);
             this.frame.pack();
