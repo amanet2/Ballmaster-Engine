@@ -34,6 +34,7 @@ public class graphicsSystem implements graphicsSystemI {
             this.frame.setContentPane(panel);
             this.frame.pack();
             this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.frame.setLocationRelativeTo(null);
             this.frame.setVisible(true);
         }
 
