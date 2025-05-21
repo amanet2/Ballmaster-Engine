@@ -1,13 +1,13 @@
 package com.app.engine;
 
-public class engineObjects {
+public class engine {
     public consoleSystem consoleSystem;
     public cVarSystem cVarSystem;
     public graphicsSystem graphicsSystem;
     public schedulerSystem schedulerSystem;
     public spriteSystem spriteSystem;
 
-    public engineObjects() {
+    public engine() {
         this.consoleSystem = new consoleSystem();
         this.cVarSystem = new cVarSystem();
         this.graphicsSystem = new graphicsSystem();
