@@ -26,9 +26,15 @@ public class consoleSystem implements consoleSystemI {
             String cmdToDoRequested = toks[0];
             gConsoleCommand command = commands.get(cmdToDoRequested);
             if(command == null)
-                return "";
+                return "null";
             String[] args = toks.length > 1 ? Arrays.copyOfRange(toks, 1, toks.length) : new String[]{""};
-            return command.doCommand(args);
+            try {
+                return command.doCommand(args);
+            }
+            catch(Exception ce) {
+                ce.printStackTrace();
+            }
+            return "null";
         }
 
         public void registerCmd(String name, gConsoleCommand command) {
