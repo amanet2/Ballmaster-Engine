@@ -9,7 +9,6 @@ public class engine {
         return instance;
     }
 
-    public camera camera;
     public consoleSystem consoleSystem;
     public cVarSystem cVarSystem;
     public graphicsSystem graphicsSystem;
@@ -17,7 +16,6 @@ public class engine {
     public spriteSystem spriteSystem;
 
     private engine() {
-        this.camera = new camera();
         this.consoleSystem = new consoleSystem();
         this.cVarSystem = new cVarSystem();
         this.graphicsSystem = new graphicsSystem();
