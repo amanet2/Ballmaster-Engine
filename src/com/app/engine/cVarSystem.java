@@ -12,6 +12,10 @@ public class cVarSystem implements cVarSystemI {
             this.value = value;
         }
 
+        public String getValue() {
+            return this.value;
+        }
+
         @Override
         public void onChange() {
 
