@@ -5,67 +5,76 @@ import java.util.Arrays;
 
 public class fileSystem implements fileSystemI {
     public class gFile implements fileSystemI.gFile {
-        private String fileName;
-        private String parentDirectory;
-        private String fullPath;
+        private String name;
+        private gDirectory parentDirectory;
 
-        public String getFullPath() {
-            return this.fullPath;
-        }
-
-        public String getFileName() {
-            return this.fileName;
-        }
-
-        public String getParentDirectory() {
-            return this.parentDirectory;
-        }
-
-        public gFile(String parentDirectory, String fileName) {
+        public gFile(gDirectory parentDirectory, String name) {
             this.parentDirectory = parentDirectory;
-            this.fileName = fileName;
-            this.fullPath = String.format("%s/%s", this.parentDirectory, this.fileName);
+            this.name = name;
         }
 
-        public gFile(String fullPath) {
-            this.parentDirectory = fullPath.substring(0, fullPath.lastIndexOf('/'));
-            this.fileName = fullPath.substring(fullPath.lastIndexOf('/') + 1);
-            this.fullPath = fullPath;
+        public String getName() {
+            return this.name;
+        }
+
+        public gDirectory getParentDirectory() {
+            return this.parentDirectory;
         }
     }
 
     public class gDirectory implements fileSystemI.gDirectory {
-        private String path;
+        private String name;
+        private gDirectory parentDirectory;
+        private gDirectory[] subDirectories;
         private gFile[] files;
-        private String[] fileNames;
 
-        public gDirectory(String path) {
-            this.path = path;
+        public gDirectory(gDirectory parentDirectory, String name) {
+            this.name = name;
+            this.parentDirectory = parentDirectory;
+            this.subDirectories = new gDirectory[]{};
             this.files = new gFile[]{};
-            this.fileNames = new String[]{};
 
-            File fp = new File(this.path);
+            File fp = new File(this.name);
             File[] fpContents = fp.listFiles();
+
             for(File ffp : fpContents) {
                 if(ffp.isFile()) {
                     this.files = Arrays.copyOf(this.files,this.files.length+1);
-                    this.fileNames = Arrays.copyOf(this.fileNames,this.fileNames.length+1);
-                    this.files[this.files.length - 1] = new gFile(this.path, ffp.getName());
-                    this.fileNames[this.fileNames.length - 1] = ffp.getName();
+                    this.files[this.files.length - 1] = new gFile(this, ffp.getPath());
+                }
+                else if(ffp.isDirectory()) {
+                    this.subDirectories = Arrays.copyOf(this.subDirectories,this.subDirectories.length+1);
+                    this.subDirectories[this.subDirectories.length - 1] = new gDirectory(this, ffp.getPath());
                 }
             }
         }
 
-        public String getPath() {
-            return this.path;
+        public String getName() {
+            return this.name;
+        }
+
+        public gDirectory getParentDirectory() {
+            return this.parentDirectory;
         }
 
         public gFile[] getFiles() {
             return this.files;
         }
 
-        public String[] getFileNames() {
-            return this.fileNames;
+        public gDirectory[] getSubDirectories() {
+            return this.subDirectories;
+        }
+    }
+
+    public class gFileSystem implements fileSystemI.gFileSystem {
+        private gDirectory rootDirectory;
+
+        public gDirectory getRootDirectory() {
+            return this.rootDirectory;
+        }
+
+        public gFileSystem(String path) {
+            this.rootDirectory = new gDirectory(null, path.isEmpty() ? "./" : path);
         }
     }
 }

@@ -11,6 +11,7 @@ public class engine {
 
     public consoleSystem consoleSystem;
     public cVarSystem cVarSystem;
+    public fileSystem fileSystem;
     public graphicsSystem graphicsSystem;
     public schedulerSystem schedulerSystem;
     public spriteSystem spriteSystem;
@@ -18,6 +19,7 @@ public class engine {
     private engine() {
         this.consoleSystem = new consoleSystem();
         this.cVarSystem = new cVarSystem();
+        this.fileSystem = new fileSystem();
         this.graphicsSystem = new graphicsSystem();
         this.schedulerSystem = new schedulerSystem();
         this.spriteSystem = new spriteSystem();

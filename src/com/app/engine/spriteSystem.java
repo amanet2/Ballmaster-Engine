@@ -1,12 +1,9 @@
 package com.app.engine;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.app.engine.fileSystem;
-import com.app.engine.fileSystem.gFile;
 
 public class spriteSystem implements spriteSystemI {
     public class gSprite implements spriteSystemI.gSprite {
@@ -22,32 +19,23 @@ public class spriteSystem implements spriteSystemI {
     }
 
     public class gSpriteSystem implements spriteSystemI.gSpriteSystem {
-        private fileSystem fileSystem;
-        private Map<String, gFile> spriteFiles;
         private Map<String, ImageIcon> baseImages;
         private HashMap<String, gSprite> scaledSprites;
 
         public gSpriteSystem() {
-            this.fileSystem = new fileSystem();
-            this.spriteFiles = new HashMap<>();
             this.baseImages = new HashMap<>();
             this.scaledSprites = new HashMap<>();
         }
 
-        public gSprite getScaledSprite(String fullPath, int width, int height) {
-            if(fullPath.equalsIgnoreCase("none"))
+        public gSprite getScaledSprite(String path, int width, int height) {
+            if(path.equalsIgnoreCase("none"))
                 return null;
 
-            this.spriteFiles.putIfAbsent(fullPath, this.fileSystem. new gFile(fullPath));
+            this.baseImages.putIfAbsent(path, new ImageIcon(path));
 
-            gFile spriteFile = this.spriteFiles.get(fullPath);
-            String spriteFileFullpath = spriteFile.getFullPath();
+            String name = String.format("%s%d%d", path, width, height);
 
-            this.baseImages.putIfAbsent(spriteFileFullpath, new ImageIcon(spriteFileFullpath));
-
-            String name = String.format("%s%d%d", spriteFileFullpath, width, height);
-
-            this.scaledSprites.putIfAbsent(name, new gSprite(this.baseImages.get(spriteFileFullpath).getImage().getScaledInstance(width, height, Image.SCALE_FAST)));
+            this.scaledSprites.putIfAbsent(name, new gSprite(this.baseImages.get(path).getImage().getScaledInstance(width, height, Image.SCALE_FAST)));
 
             return this.scaledSprites.get(name);
         }
