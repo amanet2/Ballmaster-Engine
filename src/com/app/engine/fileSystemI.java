@@ -1,7 +1,5 @@
 package com.app.engine;
 
-import java.io.File;
-
 public interface fileSystemI {
     interface gFile {
         String getName();

@@ -1,6 +1,7 @@
 package com.app.engine;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class cVarSystem implements cVarSystemI {
@@ -66,8 +67,8 @@ public class cVarSystem implements cVarSystemI {
             return cvar.value;
         }
 
-        public String[] getCVarList() {
-            return new TreeSet<>(cVarMap.keySet()).toArray(new String[0]);
+        public Set<String> keySet() {
+            return new TreeSet<>(cVarMap.keySet());
         }
     }
 }

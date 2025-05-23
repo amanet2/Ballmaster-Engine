@@ -1,5 +1,7 @@
 package com.app.engine;
 
+import java.util.Set;
+
 public interface cVarSystemI {
     interface gCVar {
         void onChange();  // called everytime a value is changed
@@ -9,7 +11,7 @@ public interface cVarSystemI {
 
     interface gCVarSystem {
         boolean registerCVar(cVarSystem.gCVar cVar);
-        String[] getCVarList();
+        Set<String> keySet();
         String getCVarValue(String name);
         String setCVarValue(String name, String value);
     }
