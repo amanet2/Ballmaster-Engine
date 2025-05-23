@@ -2,6 +2,7 @@ package com.app.engine;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public class consoleSystem implements consoleSystemI {
     public class gConsoleCommand implements consoleSystemI.gConsoleCommand {
@@ -39,6 +40,10 @@ public class consoleSystem implements consoleSystemI {
 
         public void registerCmd(String name, gConsoleCommand command) {
             commands.put(name, command);
+        }
+
+        public String[] listCmds() {
+            return new TreeSet<>(commands.keySet()).toArray(new String[0]);
         }
     }
 }

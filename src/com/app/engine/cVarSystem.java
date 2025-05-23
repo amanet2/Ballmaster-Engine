@@ -1,6 +1,7 @@
 package com.app.engine;
 
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public class cVarSystem implements cVarSystemI {
     public class gCVar implements cVarSystemI.gCVar{
@@ -63,6 +64,10 @@ public class cVarSystem implements cVarSystemI {
             if(!oldValue.equals(cvar.value))
                 cvar.onChange();
             return cvar.value;
+        }
+
+        public String[] getCVarList() {
+            return new TreeSet<>(cVarMap.keySet()).toArray(new String[0]);
         }
     }
 }

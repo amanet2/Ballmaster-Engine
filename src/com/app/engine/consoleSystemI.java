@@ -8,5 +8,6 @@ public interface consoleSystemI {
     interface gConsoleSystem {
         String readLine(String line);
         void registerCmd(String name, consoleSystem.gConsoleCommand command);
+        String[] listCmds();
     }
 }
