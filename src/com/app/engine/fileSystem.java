@@ -1,16 +1,33 @@
 package com.app.engine;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 public class fileSystem implements fileSystemI {
     public class gFile implements fileSystemI.gFile {
+        private File file;
         private String name;
         private gDirectory parentDirectory;
 
         public gFile(gDirectory parentDirectory, String name) {
+            this.file = new File(name);
             this.parentDirectory = parentDirectory;
             this.name = name;
+        }
+
+        public File getFile() {
+            return this.file;
+        }
+
+        public String[] getFileLines() {
+            try {
+                return Files.readAllLines(this.file.toPath()).toArray(new String[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new String[0];
         }
 
         public String getName() {
