@@ -17,10 +17,6 @@ public class fileSystem implements fileSystemI {
             this.name = name;
         }
 
-        public File getFile() {
-            return this.file;
-        }
-
         public String[] getFileLines() {
             try {
                 return Files.readAllLines(this.file.toPath()).toArray(new String[0]);
