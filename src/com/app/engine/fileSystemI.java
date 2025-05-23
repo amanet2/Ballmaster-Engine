@@ -4,6 +4,7 @@ public interface fileSystemI {
     interface gFile {
         String getName();
         gDirectory getParentDirectory();
+        String[] getLines();
     }
 
     interface gDirectory {

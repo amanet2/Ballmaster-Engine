@@ -1,16 +1,30 @@
 package com.app.engine;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 public class fileSystem implements fileSystemI {
     public class gFile implements fileSystemI.gFile {
+        private File file;
         private String name;
         private gDirectory parentDirectory;
 
         public gFile(gDirectory parentDirectory, String name) {
             this.parentDirectory = parentDirectory;
             this.name = name;
+        }
+
+        public String[] getLines() {
+            try {
+                if(this.file == null)
+                    this.file = new File(name);
+                return Files.readAllLines(this.file.toPath()).toArray(new String[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new String[0];
         }
 
         public String getName() {
@@ -23,6 +37,7 @@ public class fileSystem implements fileSystemI {
     }
 
     public class gDirectory implements fileSystemI.gDirectory {
+        private File file;
         private String name;
         private gDirectory parentDirectory;
         private gDirectory[] subDirectories;
@@ -32,7 +47,7 @@ public class fileSystem implements fileSystemI {
             this.name = name;
             this.parentDirectory = parentDirectory;
             this.subDirectories = new gDirectory[]{};
-            this.files = new gFile[]{};
+            this.files = new gFile[0];
 
             File fp = new File(this.name);
             File[] fpContents = fp.listFiles();
