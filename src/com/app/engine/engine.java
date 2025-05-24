@@ -9,12 +9,16 @@ public class engine {
         return instance;
     }
 
+    //systems
     public consoleSystem consoleSystem;
     public cVarSystem cVarSystem;
     public fileSystem fileSystem;
     public graphicsSystem graphicsSystem;
     public schedulerSystem schedulerSystem;
     public spriteSystem spriteSystem;
+
+    //utils
+    public utils utils;
 
     private engine() {
         this.consoleSystem = new consoleSystem();
@@ -23,5 +27,6 @@ public class engine {
         this.graphicsSystem = new graphicsSystem();
         this.schedulerSystem = new schedulerSystem();
         this.spriteSystem = new spriteSystem();
+        this.utils = new utils();
     }
 }
