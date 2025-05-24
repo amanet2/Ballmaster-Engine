@@ -6,8 +6,18 @@ import java.util.TreeSet;
 
 public class consoleSystem implements consoleSystemI {
     public class gConsoleCommand implements consoleSystemI.gConsoleCommand {
-        public gConsoleCommand() {
+        private String description;
 
+        public gConsoleCommand() {
+            this.description = "";
+        }
+
+        public gConsoleCommand(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return this.description;
         }
 
         public String doCommand(String[] args) {
@@ -40,6 +50,10 @@ public class consoleSystem implements consoleSystemI {
 
         public void registerCmd(String name, gConsoleCommand command) {
             commands.put(name, command);
+        }
+
+        public gConsoleCommand getCmd(String name) {
+            return commands.get(name);
         }
 
         public String[] listCmds() {
