@@ -16,50 +16,48 @@ public class engine {
         return instance;
     }
 
-    //systems
+    // singleton
     public gConsoleSystem gConsoleSystem;
 
+    // singleton
     public gCVarSystem gCVarSystem;
 
+    // wrapper for multiple-instance class
     public fileSystem fileSystem;
 
     // TODO: we want picture-in-picture so maybe a single Frame and Panel is not the best choice
+    // TODO: figure out if this should be singletons or not
     public graphicsSystem graphicsSystem;
 
-    public inputSystem.gKeyboard gKeyboard;
-    public inputSystem.gMouse gMouse;
+    // singletons
+    public gKeyboard gKeyboard;
+    public gMouse gMouse;
 
-    public schedulerSystem.gSchedulerSystem gSchedulerSystem;
+    // singleton
+    public gSchedulerSystem gSchedulerSystem;
 
-    public spriteSystem.gSpriteSystem gSpriteSystem;
+    // singleton
+    public gSpriteSystem gSpriteSystem;
 
-    //utils
+    // wrapper for multiple-instance class
     public utils utils;
 
     private engine() {
-        // singleton
         this.gConsoleSystem = new gConsoleSystem();
 
-        // singleton
         this.gCVarSystem = new gCVarSystem();
 
-        // wrapper for multiple-instance class
         this.fileSystem = new fileSystem();
 
-        // TODO: figure out if this should be singletons or not
         this.graphicsSystem = new graphicsSystem();
 
-        // singleton
         this.gKeyboard = new gKeyboard();
         this.gMouse = new gMouse();
 
-        // singleton
         this.gSchedulerSystem = new gSchedulerSystem();
 
-        // singleton
         this.gSpriteSystem = new gSpriteSystem();
 
-        // wrapper for multiple-instance class
         this.utils = new utils();
     }
 }
