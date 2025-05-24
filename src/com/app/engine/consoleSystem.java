@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 public class consoleSystem implements consoleSystemI {
-    public class gConsoleCommand implements consoleSystemI.gConsoleCommand {
+    public static class gConsoleCommand implements consoleSystemI.gConsoleCommand {
         private String description;
 
         public gConsoleCommand() {
