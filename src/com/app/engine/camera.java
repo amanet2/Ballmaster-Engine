@@ -22,6 +22,10 @@ public class camera implements cameraI {
         return zoom;
     }
 
+    public void setCoords(double[] coords) {
+        this.coords = coords;
+    }
+
     public double[] getCoords() {
         return this.coords;
     }
