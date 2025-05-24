@@ -4,12 +4,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 public class utils {
     public static class gDate {
         public static String getTimerString(long milliseconds) {
-            DateFormat formatter = new SimpleDateFormat("mm:ss");
-            return formatter.format(milliseconds);
+            DateFormat format = new SimpleDateFormat("HH:mm:ss");
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String timeString = format.format(milliseconds);
+            return timeString.startsWith("00") ? timeString.substring(3) : timeString;
         }
     }
 
