@@ -3,21 +3,13 @@ package com.app.engine;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 
 public class utils {
     public static class gDate {
-        private long milliseconds;
-
-        public String getTimerString() {
-            Date date = new Date(this.milliseconds);
+        public static String getTimerString(long milliseconds) {
             DateFormat formatter = new SimpleDateFormat("mm:ss");
-            return formatter.format(date);
-        }
-
-        public gDate(long milliseconds) {
-            this.milliseconds = milliseconds;
+            return formatter.format(milliseconds);
         }
     }
 
@@ -63,15 +55,15 @@ public class utils {
     }
 
     public static class gMath {
-        public int scaleIntToWindowHeight(int inputInt, int scale, int windowHeight) {
+        public static int scaleIntToWindowHeight(int inputInt, int scale, int windowHeight) {
             return (int) ((((double) inputInt / (double) scale) * (double) windowHeight));
         }
 
-        public int unscaleIntToWindowHeight(int inputInt, int scale, int windowHeight) {
+        public static int unscaleIntToWindowHeight(int inputInt, int scale, int windowHeight) {
             return (int) ((((double) inputInt * (double) scale) / (double) windowHeight));
         }
 
-        public int roundToNearest(int val, int nearest) {
+        public static int roundToNearest(int val, int nearest) {
             return Math.round((float) val /nearest) * nearest;
         }
     }
