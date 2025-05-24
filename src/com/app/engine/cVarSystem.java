@@ -6,11 +6,9 @@ import java.util.TreeSet;
 
 public class cVarSystem implements cVarSystemI {
     public static class gCVar implements cVarSystemI.gCVar{
-        private String name;
         private String value;
 
-        public gCVar(String name, String value) {
-            this.name = name;
+        public gCVar(String value) {
             this.value = value;
         }
 
@@ -37,10 +35,10 @@ public class cVarSystem implements cVarSystemI {
         }
 
         @Override
-        public boolean registerCVar(gCVar cVar) {
-            if(cVarMap.containsKey(cVar.name))
+        public boolean registerCVar(String name, gCVar cVar) {
+            if(cVarMap.containsKey(name))
                 return false;
-            cVarMap.put(cVar.name, cVar);
+            cVarMap.put(name, cVar);
             return true;
         }
 
@@ -49,7 +47,6 @@ public class cVarSystem implements cVarSystemI {
             gCVar cvar = cVarMap.get(name);
             if(cvar == null)
                 return null;
-
             return cvar.value;
         }
 
