@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class cVarSystem implements cVarSystemI {
-    public class gCVar implements cVarSystemI.gCVar{
+    public static class gCVar implements cVarSystemI.gCVar{
         private String name;
         private String value;
 

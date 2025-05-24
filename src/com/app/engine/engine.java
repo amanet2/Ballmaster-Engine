@@ -11,9 +11,14 @@ public class engine {
 
     //systems
     public consoleSystem consoleSystem;
+    public consoleSystem.gConsoleSystem gConsoleSystem;
+
     public cVarSystem cVarSystem;
+    public cVarSystem.gCVarSystem gCVarSystem;
+
     public fileSystem fileSystem;
     public graphicsSystem graphicsSystem;
+    public inputSystem inputSystem;
     public schedulerSystem schedulerSystem;
     public spriteSystem spriteSystem;
 
@@ -22,11 +27,19 @@ public class engine {
 
     private engine() {
         this.consoleSystem = new consoleSystem();
+        this.gConsoleSystem = this.consoleSystem.new gConsoleSystem();
+
         this.cVarSystem = new cVarSystem();
+        this.gCVarSystem = this.cVarSystem.new gCVarSystem();
+
+        // TODO: consider the pattern used above for the below systems i.e. singletons
+
         this.fileSystem = new fileSystem();
         this.graphicsSystem = new graphicsSystem();
+        this.inputSystem = new inputSystem();
         this.schedulerSystem = new schedulerSystem();
         this.spriteSystem = new spriteSystem();
+
         this.utils = new utils();
     }
 }
