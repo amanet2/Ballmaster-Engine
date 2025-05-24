@@ -10,36 +10,48 @@ public class engine {
     }
 
     //systems
-    public consoleSystem consoleSystem;
+    private consoleSystem consoleSystem;
     public consoleSystem.gConsoleSystem gConsoleSystem;
 
-    public cVarSystem cVarSystem;
+    private cVarSystem cVarSystem;
     public cVarSystem.gCVarSystem gCVarSystem;
 
     public fileSystem fileSystem;
+
+    // TODO: investigate singletons for these systems
+    // TODO: also we want picture-in-picture so maybe a single gPanel and camera is not the best engine
     public graphicsSystem graphicsSystem;
     public inputSystem inputSystem;
     public schedulerSystem schedulerSystem;
-    public spriteSystem spriteSystem;
+
+    private spriteSystem spriteSystem;
+    public spriteSystem.gSpriteSystem gSpriteSystem;
 
     //utils
     public utils utils;
 
     private engine() {
+        // singleton
         this.consoleSystem = new consoleSystem();
         this.gConsoleSystem = this.consoleSystem.new gConsoleSystem();
 
+        // singleton
         this.cVarSystem = new cVarSystem();
         this.gCVarSystem = this.cVarSystem.new gCVarSystem();
 
-        // TODO: consider the pattern used above for the below systems i.e. singletons
-
+        // wrapper for multiple-instance class
         this.fileSystem = new fileSystem();
+
+        // TODO: figure out if these should be singletons or not
         this.graphicsSystem = new graphicsSystem();
         this.inputSystem = new inputSystem();
         this.schedulerSystem = new schedulerSystem();
-        this.spriteSystem = new spriteSystem();
 
+        // singleton
+        this.spriteSystem = new spriteSystem();
+        this.gSpriteSystem = this.spriteSystem.new gSpriteSystem();
+
+        // wrapper for multiple-instance class
         this.utils = new utils();
     }
 }

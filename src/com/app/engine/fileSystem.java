@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 
 public class fileSystem implements fileSystemI {
-    public class gFile implements fileSystemI.gFile {
+    public static class gFile implements fileSystemI.gFile {
         private File file;
         private String name;
         private gDirectory parentDirectory;
@@ -35,7 +35,7 @@ public class fileSystem implements fileSystemI {
         }
     }
 
-    public class gDirectory implements fileSystemI.gDirectory {
+    public static class gDirectory implements fileSystemI.gDirectory {
         private String name;
         private gDirectory parentDirectory;
         private gDirectory[] subDirectories;
@@ -79,7 +79,7 @@ public class fileSystem implements fileSystemI {
         }
     }
 
-    public class gFileSystem implements fileSystemI.gFileSystem {
+    public static class gFileSystem implements fileSystemI.gFileSystem {
         private gDirectory rootDirectory;
 
         public gDirectory getRootDirectory() {
