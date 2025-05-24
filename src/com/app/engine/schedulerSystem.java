@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class schedulerSystem implements schedulerSystemI {
-    public class gSchedulerEvent implements schedulerSystemI.gSchedulerEvent {
+    public static class gSchedulerEvent implements schedulerSystemI.gSchedulerEvent {
         public gSchedulerEvent() {
 
         }

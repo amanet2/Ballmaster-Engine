@@ -8,10 +8,16 @@ import java.util.HashMap;
 
 public class utils {
     public static class gDate {
-        public static String getTimeStringFromLong(Long l) {
-            Date date = new Date(l);
+        private long milliseconds;
+
+        public String getTimerString() {
+            Date date = new Date(this.milliseconds);
             DateFormat formatter = new SimpleDateFormat("mm:ss");
             return formatter.format(date);
+        }
+
+        public gDate(long milliseconds) {
+            this.milliseconds = milliseconds;
         }
     }
 

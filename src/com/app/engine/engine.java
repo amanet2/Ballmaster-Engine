@@ -23,7 +23,7 @@ public class engine {
     public inputSystem.gKeyboard gKeyboard;
     public inputSystem.gMouse gMouse;
 
-    public schedulerSystem schedulerSystem;
+    public schedulerSystem.gSchedulerSystem gSchedulerSystem;
 
     public spriteSystem.gSpriteSystem gSpriteSystem;
 
@@ -48,7 +48,8 @@ public class engine {
         this.gKeyboard = inputSystemWrap.new gKeyboard();
         this.gMouse = inputSystemWrap.new gMouse();
 
-        this.schedulerSystem = new schedulerSystem();
+        // singleton
+        this.gSchedulerSystem = new schedulerSystem().new gSchedulerSystem();
 
         // singleton
         this.gSpriteSystem = new spriteSystem().new gSpriteSystem();
