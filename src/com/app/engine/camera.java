@@ -1,22 +1,25 @@
 package com.app.engine;
 
 public class camera implements cameraI {
-    private boolean isShaking;
-    private long shakeTick;
-    private long accelTick;
-    private double[] coords;
-    private boolean[] moves;
-    private double[] vels;
-    private double forwardVector;
+    private boolean isShaking = false;
+    private long shakeTick = 0;
+    private long accelTick = 0;
+    private double[] coords = new double[]{0.0, 0.0};
+    private boolean[] moves = new boolean[]{false, false, false, false};
+    private double[] vels = new double[]{0.0, 0.0, 0.0, 0.0};
+    private double forwardVector = 0.0;
+    private double zoom = 1.0;
 
     public camera() {
-        this.isShaking = false;
-        this.shakeTick = 0;
-        this.accelTick = 0;
-        this.coords = new double[]{0.0, 0.0};
-        this.vels = new double[]{0.0, 0.0, 0.0, 0.0};
-        this.moves = new boolean[]{false, false, false, false};
-        this.forwardVector = 0.0;
+
+    }
+
+    public void setZoom(double zoom) {
+        this.zoom = zoom;
+    }
+
+    public double getZoom() {
+        return zoom;
     }
 
     public double[] getCoords() {
