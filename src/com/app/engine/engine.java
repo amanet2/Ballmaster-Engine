@@ -1,5 +1,12 @@
 package com.app.engine;
 
+import com.app.engine.consoleSystem.gConsoleSystem;
+import com.app.engine.cVarSystem.gCVarSystem;
+import com.app.engine.inputSystem.gKeyboard;
+import com.app.engine.inputSystem.gMouse;
+import com.app.engine.schedulerSystem.gSchedulerSystem;
+import com.app.engine.spriteSystem.gSpriteSystem;
+
 public class engine {
     private static engine instance;
 
@@ -10,14 +17,13 @@ public class engine {
     }
 
     //systems
-    public consoleSystem.gConsoleSystem gConsoleSystem;
+    public gConsoleSystem gConsoleSystem;
 
-    public cVarSystem.gCVarSystem gCVarSystem;
+    public gCVarSystem gCVarSystem;
 
     public fileSystem fileSystem;
 
-    // TODO: investigate singletons for these systems
-    // TODO: also we want picture-in-picture so maybe a single gPanel and camera is not the best engine
+    // TODO: we want picture-in-picture so maybe a single Frame and Panel is not the best choice
     public graphicsSystem graphicsSystem;
 
     public inputSystem.gKeyboard gKeyboard;
@@ -32,27 +38,26 @@ public class engine {
 
     private engine() {
         // singleton
-        this.gConsoleSystem = new consoleSystem().new gConsoleSystem();
+        this.gConsoleSystem = new gConsoleSystem();
 
         // singleton
-        this.gCVarSystem = new cVarSystem().new gCVarSystem();
+        this.gCVarSystem = new gCVarSystem();
 
         // wrapper for multiple-instance class
         this.fileSystem = new fileSystem();
 
-        // TODO: figure out if these should be singletons or not
+        // TODO: figure out if this should be singletons or not
         this.graphicsSystem = new graphicsSystem();
 
         // singleton
-        inputSystem inputSystemWrap = new inputSystem();
-        this.gKeyboard = inputSystemWrap.new gKeyboard();
-        this.gMouse = inputSystemWrap.new gMouse();
+        this.gKeyboard = new gKeyboard();
+        this.gMouse = new gMouse();
 
         // singleton
-        this.gSchedulerSystem = new schedulerSystem().new gSchedulerSystem();
+        this.gSchedulerSystem = new gSchedulerSystem();
 
         // singleton
-        this.gSpriteSystem = new spriteSystem().new gSpriteSystem();
+        this.gSpriteSystem = new gSpriteSystem();
 
         // wrapper for multiple-instance class
         this.utils = new utils();

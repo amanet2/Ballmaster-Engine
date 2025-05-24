@@ -6,11 +6,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class inputSystem implements inputSystemI {
-    public class gMouse implements inputSystemI.gMouse {
+    public static class gMouse implements inputSystemI.gMouse {
 
     }
 
-    public class gKeyboard implements inputSystemI.gKeyboard {
+    public static class gKeyboard implements inputSystemI.gKeyboard {
         Queue<Integer> inputReleaseQueue;
         Queue<Integer> inputPressQueue;
         boolean shiftMode;

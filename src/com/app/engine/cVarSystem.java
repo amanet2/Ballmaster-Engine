@@ -27,7 +27,7 @@ public class cVarSystem implements cVarSystemI {
         }
     }
 
-    public class gCVarSystem implements cVarSystemI.gCVarSystem {
+    public static class gCVarSystem implements cVarSystemI.gCVarSystem {
         private HashMap<String, gCVar> cVarMap;
 
         public gCVarSystem() {

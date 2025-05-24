@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class spriteSystem implements spriteSystemI {
-    public class gSprite implements spriteSystemI.gSprite {
+    public static class gSprite implements spriteSystemI.gSprite {
         private Image image;
 
         public gSprite(Image image) {
@@ -18,7 +18,7 @@ public class spriteSystem implements spriteSystemI {
         }
     }
 
-    public class gSpriteSystem implements spriteSystemI.gSpriteSystem {
+    public static class gSpriteSystem implements spriteSystemI.gSpriteSystem {
         private Map<String, ImageIcon> baseImages;
         private HashMap<String, gSprite> scaledSprites;
 

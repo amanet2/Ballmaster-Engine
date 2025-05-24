@@ -17,7 +17,7 @@ public class schedulerSystem implements schedulerSystemI {
         }
     }
 
-    public class gSchedulerSystem implements schedulerSystemI.gSchedulerSystem {
+    public static class gSchedulerSystem implements schedulerSystemI.gSchedulerSystem {
         private ConcurrentHashMap<Long, Queue<gSchedulerEvent>> events;
         private ConcurrentLinkedQueue<gSchedulerEvent> doNowEventsQueue;
 

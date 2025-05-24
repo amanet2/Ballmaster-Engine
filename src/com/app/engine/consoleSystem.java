@@ -25,7 +25,7 @@ public class consoleSystem implements consoleSystemI {
         }
     }
 
-    public class gConsoleSystem implements consoleSystemI.gConsoleSystem {
+    public static class gConsoleSystem implements consoleSystemI.gConsoleSystem {
         private HashMap<String, gConsoleCommand> commands;
 
         public gConsoleSystem() {
