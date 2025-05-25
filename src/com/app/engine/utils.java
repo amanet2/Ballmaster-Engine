@@ -71,10 +71,6 @@ public class utils {
             boolean expectValue = false;
 
             for (String token : lexedDictStringTokens) {
-                System.out.println("PARSING: " + token);
-                System.out.println(workingDicts.toString());
-                System.out.println(workingKeys.toString());
-                System.out.println("-----");
                 switch (token) {
                     case "{" -> {
                         if(expectValue) {
@@ -93,8 +89,10 @@ public class utils {
                     }
                     case "=" -> expectValue = true;
                     case "," -> {
+                        // do nothing
                     }
                     default -> {
+                        // handle various string values
                         if (expectValue) {
                             gDict popped = workingDicts.pop();
                             popped.put(workingKeys.pop(), token);
@@ -105,7 +103,6 @@ public class utils {
                         }
                     }
                 }
-//                this.internalMap = workingDicts.pop().internalMap;
             }
         }
 
