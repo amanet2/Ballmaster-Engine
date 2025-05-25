@@ -36,9 +36,13 @@ public class utils {
             StringBuilder stringBuilder = new StringBuilder();
 
             for(int i = 0; i < dictString.length(); i++) {
+                char charAtPrevIndex = i > 0 ? dictString.charAt(i-1) : 'f';
                 char charAtIndex = dictString.charAt(i);
 
-                if(charAtIndex == '{' || charAtIndex == '=' || charAtIndex == ',' || charAtIndex == '}') {
+                if(charAtIndex == escapeCharacter) {
+                    // do nothing
+                }
+                else if(charAtPrevIndex != escapeCharacter && (charAtIndex == '{' || charAtIndex == '=' || charAtIndex == ',' || charAtIndex == '}')) {
                     if(!stringBuilder.isEmpty()) {
                         lexedDictStringTokens.add(stringBuilder.toString().trim());
                         stringBuilder = new StringBuilder();
@@ -61,12 +65,8 @@ public class utils {
             for (String token : lexedDictStringTokens) {
                 switch (token) {
                     case "{" -> {
-                        if(expectValue) {
-                            workingDicts.push(new gDict());
-                            expectValue = false;
-                        }
-                        else
-                            workingDicts.push(new gDict());
+                        workingDicts.push(new gDict());
+                        expectValue = false;
                     }
                     case "}" -> {
                         while(!workingKeys.isEmpty()) {
