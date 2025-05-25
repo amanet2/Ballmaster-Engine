@@ -25,8 +25,6 @@ public class graphicsSystem implements graphicsSystemI {
     }
 
     public class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
-        public boolean showMetrics = false;
-
         private JFrame frame;
         private int width;
         private int height;
