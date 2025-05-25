@@ -10,13 +10,30 @@ public class graphicsSystem implements graphicsSystemI {
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
+
             draw(g);
+
+            drawMetrics(g);
+
             g.dispose();
         }
 
         public void draw(Graphics g) {
             // to be overriden
             parentGGraphicsSystem.getVideoMetrics();
+        }
+
+        private void drawMetrics(Graphics g) {
+            g.setColor(Color.WHITE);
+            int debugInfoY = 0;
+            if(settings.showMetricsVideo) {
+                g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, debugInfoY + 25);
+                g.drawString("Video Frames: " + parentGGraphicsSystem.videoFrames, 0, debugInfoY + 50);
+                g.drawString("Video Frametime AVG: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotAvg + "ms", 0, debugInfoY + 75);
+                g.drawString("Video Frametime Lowest: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotLowest + "ms", 0, debugInfoY + 100);
+                g.drawString("Video Frametime Highest: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotHighest + "ms", 0, debugInfoY + 125);
+                debugInfoY += 125;
+            }
         }
 
         public gPanel() {
