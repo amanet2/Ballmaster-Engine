@@ -2,10 +2,7 @@ package com.app.engine;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.*;
 
 public class utils {
     public static class gDate {
@@ -26,17 +23,18 @@ public class utils {
         public static char escapeCharacter = '^';  // TODO: handle escape chars in strings
 
         public gDict() {
-            internalMap = new HashMap<>();
+            this.internalMap = new HashMap<>();
         }
 
         public gDict(String dictString) {
             // e.g. {foo=bar, baz={qaz=yaz}}
-            internalMap = new HashMap<>();
-
+            this.internalMap = new HashMap<>();
             ArrayList<String> lexedDictStringTokens = lexDictString(dictString);
-            gDict parsedLexedDictStringTokens = parseLexedDictStringTokens(lexedDictStringTokens);
-
             System.out.println("DICT LEXED TOKENS: " + lexedDictStringTokens);
+
+            parseLexedDictStringTokens(lexedDictStringTokens);
+
+            this.internalMap = internalMap;
         }
 
         private ArrayList<String> lexDictString(String dictString) {
@@ -67,14 +65,52 @@ public class utils {
             return lexedDictStringTokens;
         }
 
-        private gDict parseLexedDictStringTokens(ArrayList<String> lexedDictStringTokens) {
-            gDict parsedDict = new gDict();
+        private void parseLexedDictStringTokens(ArrayList<String> lexedDictStringTokens) {
+            Stack<gDict> workingDicts = new Stack<>();
+            Stack<String> workingKeys = new Stack<>();
+            Stack<String> workingSeparators = new Stack<>();
+            Stack<Object> lexedToks = new Stack<>();
+            int workingDictIndex = 0;
+            boolean expectValue = false;
 
-//            for(int i = 0; i < lexedDictStringTokens.size(); i++) {
-//                if(lexedDictStringTokens.equals(Character.toString(tokenOpenBracket)))
-//            }
-
-            return parsedDict;
+            for (String token : lexedDictStringTokens) {
+                System.out.println("PARSING: " + token);
+                System.out.println(workingDicts.toString());
+                System.out.println(workingKeys.toString());
+                System.out.println("-----");
+                switch (token) {
+                    case "{" -> {
+                        if(expectValue) {
+                            workingDicts.push(new gDict());
+                            expectValue = false;
+                        }
+                        else
+                            workingDicts.push(new gDict());
+                    }
+                    case "}" -> {
+                        if(!workingKeys.isEmpty()) {
+                            gDict popped = workingDicts.pop();
+                            workingDicts.getLast().put(workingKeys.pop(), popped);
+                        }
+                        else
+                            this.internalMap = workingDicts.pop().internalMap;
+                    }
+                    case "=" -> expectValue = true;
+                    case "," -> {
+                    }
+                    default -> {
+                        if (expectValue) {
+                            gDict popped = workingDicts.pop();
+                            popped.put(workingKeys.pop(), token);
+                            workingDicts.push(popped);
+                            expectValue = false;
+                        } else {
+                            workingKeys.push(token);
+                        }
+                    }
+                }
+//                this.internalMap = workingDicts.pop().internalMap;
+            }
         }
 
         public void put(String key, Object value) {
@@ -109,14 +145,6 @@ public class utils {
 
         public static double unscaleDoubleToWindowHeight(double input, double scale, int windowHeight) {
             return (input * scale) / (double) windowHeight;
-        }
-
-        public static int scaleIntToWindowHeight(int inputInt, int scale, int windowHeight) {
-            return (int) ((((double) inputInt / (double) scale) * (double) windowHeight));
-        }
-
-        public static int unscaleIntToWindowHeight(int inputInt, int scale, int windowHeight) {
-            return (int) ((((double) inputInt * (double) scale) / (double) windowHeight));
         }
 
         public static int roundToNearest(int val, int nearest) {
