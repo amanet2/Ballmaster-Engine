@@ -68,9 +68,6 @@ public class utils {
         private void parseLexedDictStringTokens(ArrayList<String> lexedDictStringTokens) {
             Stack<gDict> workingDicts = new Stack<>();
             Stack<String> workingKeys = new Stack<>();
-            Stack<String> workingSeparators = new Stack<>();
-            Stack<Object> lexedToks = new Stack<>();
-            int workingDictIndex = 0;
             boolean expectValue = false;
 
             for (String token : lexedDictStringTokens) {
@@ -88,12 +85,11 @@ public class utils {
                             workingDicts.push(new gDict());
                     }
                     case "}" -> {
-                        if(!workingKeys.isEmpty()) {
+                        while(!workingKeys.isEmpty()) {
                             gDict popped = workingDicts.pop();
                             workingDicts.getLast().put(workingKeys.pop(), popped);
+                            this.internalMap = workingDicts.getLast().internalMap;
                         }
-                        else
-                            this.internalMap = workingDicts.pop().internalMap;
                     }
                     case "=" -> expectValue = true;
                     case "," -> {
