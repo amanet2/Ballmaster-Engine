@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class graphicsSystem implements graphicsSystemI {
     public class gPanel extends JPanel implements graphicsSystemI.gPanel {
+        private gGraphicsSystem parentGGraphicsSystem;
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
@@ -15,6 +16,7 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void draw(Graphics g) {
             // to be overriden
+            parentGGraphicsSystem.getVideoMetrics();
         }
 
         public gPanel() {
@@ -23,9 +25,26 @@ public class graphicsSystem implements graphicsSystemI {
     }
 
     public class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
+        public boolean showMetrics = false;
+
         private JFrame frame;
         private int width;
         private int height;
+
+        // longtime to get snapshots for ALL metrics
+        private long frameMetricTimeMillis = System.currentTimeMillis() + 1000;
+
+        public int videoFrames = 0;
+        private int videoFramesPerSecondMetric = 0;
+        public int videoFramesPerSecondMetricSnapshot = 0;
+        private double videoFrametime = 0;
+        private long videoFrametimeLast = 0;
+        private double videoFrametimeMetric = 0;
+        private double videoFrametimeMetricLowest = 0;
+        public double videoFrametimeMetricSnapshotLowest = 0;
+        public double videoFrametimeMetricSnapshotAvg = 0;
+        private double videoFrametimeMetricHighest = 0;
+        public double videoFrametimeMetricSnapshotHighest = 0;
 
         public int getWidth() {
             return this.width;
@@ -43,7 +62,44 @@ public class graphicsSystem implements graphicsSystemI {
             this.height = height;
         }
 
+        private void getVideoMetrics() {
+            long currentTimeNanos = System.nanoTime();  // TODO: Use this for video frametime measurements
+            long currentTimeMillis = System.currentTimeMillis();
+
+            this.videoFramesPerSecondMetric++;
+            this.videoFrames++;
+
+            if(this.videoFrames >= Integer.MAX_VALUE - 1000)
+                this.videoFrames = 0;
+
+            this.videoFrametime = currentTimeNanos - this.videoFrametimeLast;
+            this.videoFrametimeLast = currentTimeNanos;
+            this.videoFrametimeMetric += this.videoFrametime;
+
+            if(this.videoFrametime > this.videoFrametimeMetricHighest)
+                this.videoFrametimeMetricHighest = this.videoFrametime;
+            if(this.videoFrametime < this.videoFrametimeMetricLowest)
+                this.videoFrametimeMetricLowest = this.videoFrametime;
+
+            if(currentTimeMillis > this.frameMetricTimeMillis) {
+                this.frameMetricTimeMillis = currentTimeMillis + 1000;
+
+                this.videoFramesPerSecondMetricSnapshot = this.videoFramesPerSecondMetric;
+
+                this.videoFramesPerSecondMetric = 0;
+
+                this.videoFrametimeMetricSnapshotLowest = this.videoFrametimeMetricLowest/1000000;
+                this.videoFrametimeMetricSnapshotAvg = this.videoFrametimeMetric/1000000000;
+                this.videoFrametimeMetricSnapshotHighest = this.videoFrametimeMetricHighest/1000000;
+
+                this.videoFrametimeMetric = 0;
+                this.videoFrametimeMetricLowest = 0;
+                this.videoFrametimeMetricHighest = 0;
+            }
+        }
+
         public gGraphicsSystem(gPanel panel, int width, int height) {
+            panel.parentGGraphicsSystem = this;
             this.width = width;
             this.height = height;
             this.frame = new JFrame("Ballmaster Engine");
