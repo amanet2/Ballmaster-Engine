@@ -15,12 +15,8 @@ public class utils {
     }
 
     public static class gDict {
-        private HashMap<String, Object> internalMap;  // value can be String or gDict
-        public static char tokenOpenBracket = '{';
-        public static char tokenAssigner = '=';
-        public static char tokenSeparator = ',';
-        public static char tokenCloseBracket = '}';
-        public static char escapeCharacter = '^';  // TODO: handle escape chars in strings
+        private HashMap<String, Object> internalMap;  // values can be String or gDict
+        public static char escapeCharacter = '^';  // TODO: handle escape chars in dict strings
 
         public gDict() {
             this.internalMap = new HashMap<>();
@@ -42,17 +38,12 @@ public class utils {
             for(int i = 0; i < dictString.length(); i++) {
                 char charAtIndex = dictString.charAt(i);
 
-                if(charAtIndex == tokenOpenBracket
-                        || charAtIndex == tokenAssigner
-                        || charAtIndex == tokenSeparator
-                        || charAtIndex == tokenCloseBracket) {
+                if(charAtIndex == '{' || charAtIndex == '=' || charAtIndex == ',' || charAtIndex == '}') {
                     if(!stringBuilder.isEmpty()) {
-//                        lexedDictStringTokens.add("'" + stringBuilder.toString().trim() +"'");  // for debugging
                         lexedDictStringTokens.add(stringBuilder.toString().trim());
                         stringBuilder = new StringBuilder();
                     }
 
-//                    lexedDictStringTokens.add("'" + Character.toString(charAtIndex) + "'");  // for debugging
                     lexedDictStringTokens.add(Character.toString(charAtIndex));
                 }
                 else
@@ -81,23 +72,17 @@ public class utils {
                         while(!workingKeys.isEmpty()) {
                             gDict popped = workingDicts.pop();
                             workingDicts.getLast().put(workingKeys.pop(), popped);
-                            this.internalMap = workingDicts.getLast().internalMap;
                         }
                     }
                     case "=" -> expectValue = true;
-                    case "," -> {
-                        // do nothing
-                    }
+                    case "," -> {}
                     default -> {
                         // handle various string values
                         if (expectValue) {
-                            gDict popped = workingDicts.pop();
-                            popped.put(workingKeys.pop(), token);
-                            workingDicts.push(popped);
+                            workingDicts.getLast().put(workingKeys.pop(), token);
                             expectValue = false;
-                        } else {
+                        } else
                             workingKeys.push(token);
-                        }
                     }
                 }
             }
@@ -121,10 +106,6 @@ public class utils {
         }
 
         public String toString() {
-            // TODO: implement escape chars
-//            for(char reservedChar : new char[]{gDict.tokenOpenBracket, gDict.tokenAssigner, gDict.tokenSeparator, gDict.escapeCharacter}) {
-//                kValue = kValue.replace(Character.toString(reservedChar), "^"+reservedChar);
-//            }
             return internalMap.toString();
         }
     }
