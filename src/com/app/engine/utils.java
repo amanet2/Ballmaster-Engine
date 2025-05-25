@@ -27,14 +27,11 @@ public class utils {
         }
 
         public gDict(String dictString) {
-            // e.g. {foo=bar, baz={qaz=yaz}}
             this.internalMap = new HashMap<>();
+
             ArrayList<String> lexedDictStringTokens = lexDictString(dictString);
-            System.out.println("DICT LEXED TOKENS: " + lexedDictStringTokens);
 
             parseLexedDictStringTokens(lexedDictStringTokens);
-
-            this.internalMap = internalMap;
         }
 
         private ArrayList<String> lexDictString(String dictString) {
@@ -104,6 +101,7 @@ public class utils {
                     }
                 }
             }
+            this.internalMap = workingDicts.getLast().internalMap;
         }
 
         public void put(String key, Object value) {
