@@ -35,6 +35,16 @@ public class graphicsSystem implements graphicsSystemI {
 
         }
 
+        public void setCameraTransform(Graphics g, camera c) {
+            // move world to match camera coords
+            double[] cCoods = c.getCoords();
+            g.translate(-(int)cCoods[0], -(int)cCoods[1]);
+
+            //zoom in or out depending on camera setting
+            double cameraZoom = c.getZoom();
+            ((Graphics2D) g).scale(cameraZoom, cameraZoom);
+        }
+
         public void restoreScaledTransform(Graphics g) {
             ((Graphics2D) g).setTransform(this.savedTransform);
 
