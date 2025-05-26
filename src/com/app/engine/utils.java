@@ -16,7 +16,7 @@ public class utils {
 
     public static class gDict {
         private HashMap<String, Object> internalMap;  // values can be String or gDict
-        public static char escapeCharacter = '^';  // TODO: handle escape chars in dict strings
+        public static char escapeCharacter = '^';
 
         public gDict() {
             this.internalMap = new HashMap<>();
