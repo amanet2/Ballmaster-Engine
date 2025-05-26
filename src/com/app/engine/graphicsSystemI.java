@@ -5,6 +5,7 @@ import java.awt.Graphics;
 public interface graphicsSystemI {
     interface gPanel {
         void draw(Graphics g);
+        void setCameraTransform(Graphics g, camera c);
         void restoreScaledTransform(Graphics g);
     }
 

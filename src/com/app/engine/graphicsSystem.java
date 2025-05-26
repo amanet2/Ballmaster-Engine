@@ -9,12 +9,14 @@ public class graphicsSystem implements graphicsSystemI {
     public static class gPanel extends JPanel implements graphicsSystemI.gPanel {
         private gGraphicsSystem parentGGraphicsSystem;
         private AffineTransform savedTransform;
+
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
 
             draw(g);
 
+            parentGGraphicsSystem.getVideoMetrics();
             drawMetrics(g);
 
             g.dispose();
@@ -22,8 +24,6 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void draw(Graphics g) {
             // to be overriden
-            parentGGraphicsSystem.getVideoMetrics();
-
             this.savedTransform = ((Graphics2D) g).getTransform();
 
             // center the screen over 0,0
