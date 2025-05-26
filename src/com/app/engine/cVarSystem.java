@@ -45,27 +45,43 @@ public class cVarSystem implements cVarSystemI {
         @Override
         public String getCVarValue(String name) {
             gCVar cvar = cVarMap.get(name);
-            if(cvar == null)
+            if(cvar == null) {
+                System.out.printf("No cvar found for '%s'%n", name);
                 return null;
+            }
             return cvar.value;
         }
 
         @Override
         public String setCVarValue(String name, String value) {
             gCVar cvar = this.cVarMap.get(name);
-            if(cvar == null)
+            if(cvar == null) {
+                System.out.printf("No cvar found for '%s'%n", name);
                 return null;
+            }
 
             String oldValue = cvar.value;
             cvar.value = value;
             cvar.onUpdate();
             if(!oldValue.equals(cvar.value))
                 cvar.onChange();
+            System.out.printf("Set value of cvar '%s' to '%s'%n", name, value);
             return cvar.value;
         }
 
         public Set<String> keySet() {
             return new TreeSet<>(cVarMap.keySet());
+        }
+
+        public void parseArgs(String[] args) {
+            for(int i = 0; i < args.length; i++) {
+                System.out.println("ARG: " + args[i]);
+                if(getCVarValue(args[i]) != null && args.length > i+1) {
+                    System.out.println("ARG VALUE: " + args[i+1]);
+                    setCVarValue(args[i], args[i+1]);
+                    i+=1;
+                }
+            }
         }
     }
 }

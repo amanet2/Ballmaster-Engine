@@ -80,17 +80,17 @@ public class graphicsSystem implements graphicsSystemI {
         // longtime to get snapshots for ALL metrics
         private long frameMetricTimeMillis = System.currentTimeMillis() + 1000;
 
-        public int videoFrames = 0;
+        private int videoFrames = 0;
         private int videoFramesPerSecondMetric = 0;
-        public int videoFramesPerSecondMetricSnapshot = 0;
+        private int videoFramesPerSecondMetricSnapshot = 0;
         private double videoFrametime = 0;
         private long videoFrametimeLast = 0;
         private double videoFrametimeMetric = 0;
         private double videoFrametimeMetricLowest = 0;
-        public double videoFrametimeMetricSnapshotLowest = 0;
-        public double videoFrametimeMetricSnapshotAvg = 0;
+        private double videoFrametimeMetricSnapshotLowest = 0;
+        private double videoFrametimeMetricSnapshotAvg = 0;
         private double videoFrametimeMetricHighest = 0;
-        public double videoFrametimeMetricSnapshotHighest = 0;
+        private double videoFrametimeMetricSnapshotHighest = 0;
 
         public int getWidth() {
             return this.width;
