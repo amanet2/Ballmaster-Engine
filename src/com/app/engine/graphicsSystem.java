@@ -3,10 +3,12 @@ package com.app.engine;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class graphicsSystem implements graphicsSystemI {
     public static class gPanel extends JPanel implements graphicsSystemI.gPanel {
         private gGraphicsSystem parentGGraphicsSystem;
+        private AffineTransform savedTransform;
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
@@ -21,6 +23,24 @@ public class graphicsSystem implements graphicsSystemI {
         public void draw(Graphics g) {
             // to be overriden
             parentGGraphicsSystem.getVideoMetrics();
+
+            this.savedTransform = ((Graphics2D) g).getTransform();
+
+            // center the screen over 0,0
+            g.translate((int)((double)parentGGraphicsSystem.width/2.0), (int)((double)parentGGraphicsSystem.height/2.0));
+
+            // scale the world according to screen height
+            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.height);
+            ((Graphics2D) g).scale(scaleFactor, scaleFactor);
+
+        }
+
+        public void restoreScaledTransform(Graphics g) {
+            ((Graphics2D) g).setTransform(this.savedTransform);
+
+            // scale ui text according to window screen height
+            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.height);
+            ((Graphics2D) g).scale(scaleFactor, scaleFactor);
         }
 
         private void drawMetrics(Graphics g) {
@@ -45,6 +65,7 @@ public class graphicsSystem implements graphicsSystemI {
         private JFrame frame;
         private int width;
         private int height;
+        private double internalScale = 768.0;
 
         // longtime to get snapshots for ALL metrics
         private long frameMetricTimeMillis = System.currentTimeMillis() + 1000;
