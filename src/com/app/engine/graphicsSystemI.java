@@ -13,5 +13,6 @@ public interface graphicsSystemI {
         void setWidth(int width);
         int getHeight();
         void setHeight(int height);
+        void setPanel(graphicsSystem.gPanel panel);
     }
 }

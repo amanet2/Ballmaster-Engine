@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 import java.awt.*;
 
 public class graphicsSystem implements graphicsSystemI {
-    public class gPanel extends JPanel implements graphicsSystemI.gPanel {
+    public static class gPanel extends JPanel implements graphicsSystemI.gPanel {
         private gGraphicsSystem parentGGraphicsSystem;
         @Override
         public void paintComponent(Graphics g){
@@ -26,7 +26,7 @@ public class graphicsSystem implements graphicsSystemI {
         private void drawMetrics(Graphics g) {
             g.setColor(Color.WHITE);
             int debugInfoY = 0;
-            if(settings.showMetricsVideo) {
+            if(engine.showMetricsVideo) {
                 g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, debugInfoY + 25);
                 g.drawString("Video Frames: " + parentGGraphicsSystem.videoFrames, 0, debugInfoY + 50);
                 g.drawString("Video Frametime AVG: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotAvg + "ms", 0, debugInfoY + 75);
@@ -41,7 +41,7 @@ public class graphicsSystem implements graphicsSystemI {
         }
     }
 
-    public class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
+    public static class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
         private JFrame frame;
         private int width;
         private int height;
@@ -101,22 +101,24 @@ public class graphicsSystem implements graphicsSystemI {
 
                 this.videoFramesPerSecondMetricSnapshot = this.videoFramesPerSecondMetric;
 
-                this.videoFramesPerSecondMetric = 0;
 
                 this.videoFrametimeMetricSnapshotLowest = this.videoFrametimeMetricLowest/1000000;
-                this.videoFrametimeMetricSnapshotAvg = this.videoFrametimeMetric/1000000000;
+                this.videoFrametimeMetricSnapshotAvg = this.videoFrametimeMetric/this.videoFramesPerSecondMetric/1000000;
                 this.videoFrametimeMetricSnapshotHighest = this.videoFrametimeMetricHighest/1000000;
 
+                this.videoFramesPerSecondMetric = 0;
                 this.videoFrametimeMetric = 0;
                 this.videoFrametimeMetricLowest = 0;
                 this.videoFrametimeMetricHighest = 0;
             }
         }
 
-        public gGraphicsSystem(gPanel panel, int width, int height) {
+        public gGraphicsSystem() {
+
+        }
+
+        public void setPanel(gPanel panel) {
             panel.parentGGraphicsSystem = this;
-            this.width = width;
-            this.height = height;
             this.frame = new JFrame("Ballmaster Engine");
             this.frame.setResizable(false);
             this.frame.setBackground(Color.BLACK);
