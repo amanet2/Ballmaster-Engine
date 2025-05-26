@@ -1,6 +1,7 @@
 package com.app.engine;
 
 import java.util.Set;
+import com.app.engine.utils.gDict;
 
 public interface cVarSystemI {
     interface gCVar {
@@ -15,5 +16,7 @@ public interface cVarSystemI {
         String getCVarValue(String name);
         String setCVarValue(String name, String value);
         void parseArgs(String[] args);
+        gDict toDict();
+        String[] getCVarList();
     }
 }

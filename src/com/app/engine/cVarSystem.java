@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.app.engine.utils.gDict;
+
 public class cVarSystem implements cVarSystemI {
     public static class gCVar implements cVarSystemI.gCVar{
         private String value;
@@ -28,23 +30,25 @@ public class cVarSystem implements cVarSystemI {
     }
 
     public static class gCVarSystem implements cVarSystemI.gCVarSystem {
-        private HashMap<String, gCVar> cVarMap;
+        private HashMap<String, gCVar> internalMap;
 
         public gCVarSystem() {
-            this.cVarMap = new HashMap<>();
+            this.internalMap = new HashMap<>();
         }
 
         @Override
         public boolean registerCVar(String name, gCVar cVar) {
-            if(cVarMap.containsKey(name))
+            if(this.internalMap.containsKey(name)) {
+                System.out.printf("CVar name '%s' is already registered for CVarSystem '%s'.%n", name, this);
                 return false;
-            cVarMap.put(name, cVar);
+            }
+            this.internalMap.put(name, cVar);
             return true;
         }
 
         @Override
         public String getCVarValue(String name) {
-            gCVar cvar = cVarMap.get(name);
+            gCVar cvar = this.internalMap.get(name);
             if(cvar == null) {
                 System.out.printf("No cvar found for '%s'%n", name);
                 return null;
@@ -54,7 +58,7 @@ public class cVarSystem implements cVarSystemI {
 
         @Override
         public String setCVarValue(String name, String value) {
-            gCVar cvar = this.cVarMap.get(name);
+            gCVar cvar = this.internalMap.get(name);
             if(cvar == null) {
                 System.out.printf("No cvar found for '%s'%n", name);
                 return null;
@@ -70,7 +74,11 @@ public class cVarSystem implements cVarSystemI {
         }
 
         public Set<String> keySet() {
-            return new TreeSet<>(cVarMap.keySet());
+            return new TreeSet<>(this.internalMap.keySet());
+        }
+
+        public String[] getCVarList() {
+            return this.keySet().toArray(new String[0]);
         }
 
         public void parseArgs(String[] args) {
@@ -82,6 +90,14 @@ public class cVarSystem implements cVarSystemI {
                     i+=1;
                 }
             }
+        }
+
+        public gDict toDict() {
+            gDict dict = new gDict();
+            for(String k : keySet()) {
+                dict.put(k, this.internalMap.get(k).value);
+            }
+            return dict;
         }
     }
 }
