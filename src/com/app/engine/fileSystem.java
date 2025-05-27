@@ -51,13 +51,14 @@ public class fileSystem implements fileSystemI {
             File[] fpContents = fp.listFiles();
 
             for(File ffp : fpContents) {
+                String path = ffp.getPath().replace('\\', '/');
                 if(ffp.isFile()) {
                     this.files = Arrays.copyOf(this.files,this.files.length+1);
-                    this.files[this.files.length - 1] = new gFile(this, ffp.getPath().replace('\\', '/'));
+                    this.files[this.files.length - 1] = new gFile(this, path);
                 }
                 else if(ffp.isDirectory()) {
                     this.subDirectories = Arrays.copyOf(this.subDirectories,this.subDirectories.length+1);
-                    this.subDirectories[this.subDirectories.length - 1] = new gDirectory(this, ffp.getPath().replace('\\', '/'));
+                    this.subDirectories[this.subDirectories.length - 1] = new gDirectory(this, path);
                 }
             }
         }
@@ -87,7 +88,7 @@ public class fileSystem implements fileSystemI {
         }
 
         public gFileSystem(String path) {
-            this.rootDirectory = new gDirectory(null, path.isEmpty() ? "./" : path);
+            this.rootDirectory = new gDirectory(null, path);
         }
     }
 }

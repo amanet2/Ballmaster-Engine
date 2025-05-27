@@ -122,8 +122,16 @@ public class engine {
             @Override
             public String doCommand(String[] args) {
                 if(args.length < 2)
-                    return "Usage: set CVAR_NAME CVAR_VALUE\n";
+                    return "Usage: set CVAR_NAME CVAR_VALUE";
                 return gCVarSystem.setCVarValue(args[0], args[1]);
+            }
+        };
+        gConsoleCommand gConsoleCommandVstr = new gConsoleCommand("inserts the current value of a cvar as command text") {
+            @Override
+            public String doCommand(String[] args) {
+                if(args.length < 1)
+                    return "Usage: vstr CVAR_NAME";
+                return gCVarSystem.getCVarValue(args[0]);
             }
         };
 
@@ -140,6 +148,7 @@ public class engine {
 //        gConsoleSystem.registerCmd("script", gConsoleCommandScript);
 //        gConsoleSystem.registerCmd("scriptFile", gConsoleCommandScriptFile);
         gConsoleSystem.registerCmd("set", gConsoleCommandSet);
+        gConsoleSystem.registerCmd("vstr", gConsoleCommandVstr);
     }
 
     private void registerDefaultCVars() {
