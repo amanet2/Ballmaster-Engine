@@ -11,7 +11,7 @@ public interface cVarSystemI {
     }
 
     interface gCVarSystem {
-        boolean registerCVar(String name, cVarSystem.gCVar cVar);
+        String registerCVar(String name, cVarSystem.gCVar cVar);
         Set<String> keySet();
         String getCVarValue(String name);
         String setCVarValue(String name, String value);

@@ -37,40 +37,33 @@ public class cVarSystem implements cVarSystemI {
         }
 
         @Override
-        public boolean registerCVar(String name, gCVar cVar) {
-            if(this.internalMap.containsKey(name)) {
-                System.out.printf("CVar name '%s' is already registered for CVarSystem '%s'.%n", name, this);
-                return false;
-            }
+        public String registerCVar(String name, gCVar cVar) {
+            if(this.internalMap.containsKey(name))
+                return String.format("CVar name '%s' is already registered for CVarSystem '%s'", name, this);
             this.internalMap.put(name, cVar);
-            return true;
+            return String.format("Registered new CVar '%s'", name);
         }
 
         @Override
         public String getCVarValue(String name) {
             gCVar cvar = this.internalMap.get(name);
-            if(cvar == null) {
-                System.out.printf("No cvar found for '%s'%n", name);
-                return null;
-            }
+            if(cvar == null)
+                return String.format("No cvar found for '%s'", name);
             return cvar.value;
         }
 
         @Override
         public String setCVarValue(String name, String value) {
             gCVar cvar = this.internalMap.get(name);
-            if(cvar == null) {
-                System.out.printf("No cvar found for '%s'%n", name);
-                return null;
-            }
+            if(cvar == null)
+                return String.format("No cvar found for '%s'", name);
 
             String oldValue = cvar.value;
             cvar.value = value;
             cvar.onUpdate();
             if(!oldValue.equals(cvar.value))
                 cvar.onChange();
-            System.out.printf("Set value of cvar '%s' to '%s'%n", name, value);
-            return cvar.value;
+            return String.format("Set value of cvar '%s' to '%s'", name, value);
         }
 
         public Set<String> keySet() {
