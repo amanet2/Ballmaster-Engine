@@ -73,8 +73,8 @@ public class graphicsSystem implements graphicsSystemI {
 
     public static class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
         private JFrame frame;
-        private int width;
-        private int height;
+        private int width = 1024;  // defaults
+        private int height = 768;  // defaults
         private double internalScale = 768.0;
 
         // longtime to get snapshots for ALL metrics
