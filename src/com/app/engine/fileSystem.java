@@ -53,11 +53,11 @@ public class fileSystem implements fileSystemI {
             for(File ffp : fpContents) {
                 if(ffp.isFile()) {
                     this.files = Arrays.copyOf(this.files,this.files.length+1);
-                    this.files[this.files.length - 1] = new gFile(this, ffp.getPath());
+                    this.files[this.files.length - 1] = new gFile(this, ffp.getPath().replace('\\', '/'));
                 }
                 else if(ffp.isDirectory()) {
                     this.subDirectories = Arrays.copyOf(this.subDirectories,this.subDirectories.length+1);
-                    this.subDirectories[this.subDirectories.length - 1] = new gDirectory(this, ffp.getPath());
+                    this.subDirectories[this.subDirectories.length - 1] = new gDirectory(this, ffp.getPath().replace('\\', '/'));
                 }
             }
         }

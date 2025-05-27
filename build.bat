@@ -11,5 +11,5 @@ REM build
 %java_bin%\jar cf %jar_out% -C %java_out% .
 
 REM cleanup
-xcopy %jar_out% %game_home%\%jar_name%*
+xcopy /Y %jar_out% %game_home%\%jar_name%*
 rmdir /s /q %java_out%
