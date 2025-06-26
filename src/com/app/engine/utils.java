@@ -16,18 +16,16 @@ public class utils {
 
     public static class gDict {
         private HashMap<String, Object> internalMap;  // values can be String or gDict
-        public static char escapeCharacter = '^';
+        public static char escapeCharacter = '\\';
+        private ArrayList<String> parsingTokens = new ArrayList<>();
 
         public gDict() {
             this.internalMap = new HashMap<>();
         }
 
         public gDict(String dictString) {
-            this.internalMap = new HashMap<>();
-
-            ArrayList<String> lexedDictStringTokens = lexDictString(dictString);
-
-            parseLexedDictStringTokens(lexedDictStringTokens);
+            parsingTokens = lexDictString(dictString);
+            this.internalMap = (HashMap<String, Object>) parse();
         }
 
         private ArrayList<String> lexDictString(String dictString) {
@@ -57,36 +55,52 @@ public class utils {
             return lexedDictStringTokens;
         }
 
-        private void parseLexedDictStringTokens(ArrayList<String> lexedDictStringTokens) {
-            Stack<gDict> workingDicts = new Stack<>();
-            Stack<String> workingKeys = new Stack<>();
-            boolean expectValue = false;
+        private HashMap<String, Object> parseObject() {
+            HashMap<String, Object> map = new HashMap<>();
 
-            for (String token : lexedDictStringTokens) {
-                switch (token) {
-                    case "{" -> {
-                        workingDicts.push(new gDict());
-                        expectValue = false;
-                    }
-                    case "}" -> {
-                        while(!workingKeys.isEmpty()) {
-                            gDict popped = workingDicts.pop();
-                            workingDicts.getLast().put(workingKeys.pop(), popped);
-                        }
-                    }
-                    case "=" -> expectValue = true;
-                    case "," -> {}
-                    default -> {
-                        // handle various string values
-                        if (expectValue) {
-                            workingDicts.getLast().put(workingKeys.pop(), token);
-                            expectValue = false;
-                        } else
-                            workingKeys.push(token);
-                    }
-                }
+            String token = parsingTokens.getFirst();
+
+            if(token.equals("}")) {
+                iterateParsing();
+                return map;
             }
-            this.internalMap = workingDicts.getLast().internalMap;
+
+            while(true) {
+                String key = parsingTokens.getFirst();
+
+                iterateParsing();
+                iterateParsing();
+
+                Object value = parse();
+
+                map.put(key, value);
+
+                token = parsingTokens.getFirst();
+
+                if(token.equals("}")) {
+                    iterateParsing();
+                    return map;
+                }
+
+                iterateParsing();
+            }
+        }
+
+        private Object parse() {
+            String token = parsingTokens.getFirst();
+
+            if(token.equals("{")) {
+                iterateParsing();
+                return parseObject();
+            }
+            else {
+                iterateParsing();
+                return token;
+            }
+        }
+
+        private void iterateParsing() {
+            parsingTokens = new ArrayList<String>(parsingTokens.subList(1, parsingTokens.size()));
         }
 
         public void put(String key, Object value) {
