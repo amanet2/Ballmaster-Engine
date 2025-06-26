@@ -24,31 +24,26 @@ public class utils {
         }
 
         public gDict(String dictString) {
-            parsingTokens = lexDictString(dictString);
+            parsingTokens = lex(dictString);
             this.internalMap = (HashMap<String, Object>) parse();
         }
 
-        private ArrayList<String> lexDictString(String dictString) {
+        private ArrayList<String> lex(String dictString) {
             ArrayList<String> lexedDictStringTokens = new ArrayList<>();
-
             StringBuilder stringBuilder = new StringBuilder();
 
             for(int i = 0; i < dictString.length(); i++) {
                 char charAtPrevIndex = i > 0 ? dictString.charAt(i-1) : 'f';
                 char charAtIndex = dictString.charAt(i);
 
-                if(charAtIndex == escapeCharacter) {
-                    // do nothing
-                }
-                else if(charAtPrevIndex != escapeCharacter && (charAtIndex == '{' || charAtIndex == '=' || charAtIndex == ',' || charAtIndex == '}')) {
+                if(charAtPrevIndex != escapeCharacter && (charAtIndex == '{' || charAtIndex == '=' || charAtIndex == ',' || charAtIndex == '}')) {
                     if(!stringBuilder.isEmpty()) {
                         lexedDictStringTokens.add(stringBuilder.toString().trim());
                         stringBuilder = new StringBuilder();
                     }
-
                     lexedDictStringTokens.add(Character.toString(charAtIndex));
                 }
-                else
+                else if(charAtIndex != escapeCharacter)
                     stringBuilder.append(dictString.charAt(i));
             }
 
@@ -60,7 +55,7 @@ public class utils {
 
             String token = parsingTokens.getFirst();
 
-            if(token.equals("}")) {
+            if(token.equals("}")) {  //empty map case
                 iterateParsing();
                 return map;
             }
@@ -68,21 +63,21 @@ public class utils {
             while(true) {
                 String key = parsingTokens.getFirst();
 
-                iterateParsing();
-                iterateParsing();
+                iterateParsing(); // go to equal sign
+                iterateParsing(); // skip equal sign
 
-                Object value = parse();
+                Object value = parse(); // get value as string or new dict
 
-                map.put(key, value);
+                map.put(key, value); // assign
 
-                token = parsingTokens.getFirst();
+                token = parsingTokens.getFirst(); // check if closing the obj or a comma
 
                 if(token.equals("}")) {
                     iterateParsing();
                     return map;
                 }
 
-                iterateParsing();
+                iterateParsing();  // skip comma
             }
         }
 
@@ -100,27 +95,27 @@ public class utils {
         }
 
         private void iterateParsing() {
-            parsingTokens = new ArrayList<String>(parsingTokens.subList(1, parsingTokens.size()));
+            parsingTokens = new ArrayList<>(parsingTokens.subList(1, parsingTokens.size()));
         }
 
         public void put(String key, Object value) {
-            internalMap.put(key, value);
+            this.internalMap.put(key, value);
         }
 
         public Object get(String key) {
-            return internalMap.get(key);
+            return this.internalMap.get(key);
         }
 
         public boolean contains(String key) {
-            return internalMap.containsKey(key);
+            return this.internalMap.containsKey(key);
         }
 
         public Collection<String> keys() {
-            return internalMap.keySet();
+            return this.internalMap.keySet();
         }
 
         public String toString() {
-            return internalMap.toString();
+            return this.internalMap.toString();
         }
     }
 
