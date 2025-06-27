@@ -64,9 +64,6 @@ public class utils {
             }
 
             while(true) {
-                System.out.println("---");
-                System.out.println(parsingTokens);
-
                 Object value = parse();
                 list.add(value);
 
