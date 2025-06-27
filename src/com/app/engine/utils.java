@@ -23,6 +23,7 @@ public class utils {
             this.internalMap = new HashMap<>();
         }
 
+        @SuppressWarnings("unchecked")
         public gDict(String dictString) {
             parsingTokens = lex(dictString);
             this.internalMap = (HashMap<String, Object>) parse();
