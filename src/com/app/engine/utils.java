@@ -29,6 +29,7 @@ public class utils {
         }
 
         private ArrayList<String> lex(String dictString) {
+            ArrayList<Character> importantChars = new ArrayList<>(List.of(new Character[]{'{', '}', '=', ',', '[', ']'}));
             ArrayList<String> lexedDictStringTokens = new ArrayList<>();
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -36,7 +37,7 @@ public class utils {
                 char charAtPrevIndex = i > 0 ? dictString.charAt(i-1) : 'f';
                 char charAtIndex = dictString.charAt(i);
 
-                if(charAtPrevIndex != escapeCharacter && (charAtIndex == '{' || charAtIndex == '=' || charAtIndex == ',' || charAtIndex == '}')) {
+                if(charAtPrevIndex != escapeCharacter && (importantChars.contains(charAtIndex))) {
                     if(!stringBuilder.isEmpty()) {
                         lexedDictStringTokens.add(stringBuilder.toString().trim());
                         stringBuilder = new StringBuilder();
@@ -50,51 +51,85 @@ public class utils {
             return lexedDictStringTokens;
         }
 
+        private ArrayList<Object> parseArray() {
+            ArrayList<Object> list = new ArrayList<>();
+
+            String token = getParsingToken();
+            if(token.equals("]")) { // empty list case
+                advanceParsingToken();
+                return list;
+            }
+
+            while(true) {
+                System.out.println("---");
+                System.out.println(parsingTokens);
+
+                Object value = parse();
+                list.add(value);
+
+                token = getParsingToken();
+                if(token.equals("]")) {
+                    advanceParsingToken();
+                    return list;
+                }
+                else
+                    advanceParsingToken();
+            }
+        }
+
         private HashMap<String, Object> parseObject() {
             HashMap<String, Object> map = new HashMap<>();
 
-            String token = parsingTokens.getFirst();
+            String token = getParsingToken();
 
-            if(token.equals("}")) {  //empty map case
-                iterateParsing();
+            if(token.equals("}")) {  // empty map case
+                advanceParsingToken();
                 return map;
             }
 
             while(true) {
-                String key = parsingTokens.getFirst();
+                String key = getParsingToken();
 
-                iterateParsing(); // go to equal sign
-                iterateParsing(); // skip equal sign
+                advanceParsingToken(); // go to equal sign
+                advanceParsingToken(); // skip equal sign
 
                 Object value = parse(); // get value as string or new dict
 
                 map.put(key, value); // assign
 
-                token = parsingTokens.getFirst(); // check if closing the obj or a comma
+                token = getParsingToken(); // check if closing the obj or a comma
 
                 if(token.equals("}")) {
-                    iterateParsing();
+                    advanceParsingToken();
                     return map;
                 }
 
-                iterateParsing();  // skip comma
+                advanceParsingToken();  // skip comma
             }
         }
 
         private Object parse() {
-            String token = parsingTokens.getFirst();
+            String token = getParsingToken();
 
             if(token.equals("{")) {
-                iterateParsing();
+                advanceParsingToken();
                 return parseObject();
             }
+            else if(token.equals("[")) {
+                advanceParsingToken();
+                return parseArray();
+            }
             else {
-                iterateParsing();
+                advanceParsingToken();
                 return token;
             }
         }
 
-        private void iterateParsing() {
+        private String getParsingToken() {
+            return parsingTokens.getFirst();
+        }
+
+        private void advanceParsingToken() {
             parsingTokens = new ArrayList<>(parsingTokens.subList(1, parsingTokens.size()));
         }
 
