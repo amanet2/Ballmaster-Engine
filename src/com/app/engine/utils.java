@@ -18,6 +18,7 @@ public class utils {
         private HashMap<String, Object> internalMap;  // values can be String or gDict
         public static char escapeCharacter = '\\';
         private ArrayList<String> parsingTokens = new ArrayList<>();
+        private int parsingIndex = 0;
 
         public gDict() {
             this.internalMap = new HashMap<>();
@@ -26,6 +27,7 @@ public class utils {
         @SuppressWarnings("unchecked")
         public gDict(String dictString) {
             parsingTokens = lex(dictString);
+            parsingIndex = 0;
             this.internalMap = (HashMap<String, Object>) parse();
         }
 
@@ -127,11 +129,11 @@ public class utils {
         }
 
         private String getParsingToken() {
-            return parsingTokens.getFirst();
+            return parsingTokens.get(parsingIndex);
         }
 
         private void advanceParsingToken() {
-            parsingTokens = new ArrayList<>(parsingTokens.subList(1, parsingTokens.size()));
+            parsingIndex++;
         }
 
         public void put(String key, Object value) {
