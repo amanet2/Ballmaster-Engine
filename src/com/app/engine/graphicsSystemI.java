@@ -11,6 +11,7 @@ public interface graphicsSystemI {
 
     interface gGraphicsSystem {
         void update();
+        void finish();
         int getWidth();
         void setWidth(int width);
         int getHeight();

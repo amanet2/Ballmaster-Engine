@@ -4,23 +4,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferStrategy;
 
 public class graphicsSystem implements graphicsSystemI {
     public static class gPanel extends JPanel implements graphicsSystemI.gPanel {
         private gGraphicsSystem parentGGraphicsSystem;
         private AffineTransform savedTransform;
-
-        @Override
-        public void paintComponent(Graphics g){
-            super.paintComponent(g);
-
-            draw(g);
-
-            parentGGraphicsSystem.getVideoMetrics();
-            drawMetrics(g);
-
-            g.dispose();
-        }
 
         public void draw(Graphics g) {
             // to be overriden
@@ -55,19 +44,20 @@ public class graphicsSystem implements graphicsSystemI {
 
         private void drawMetrics(Graphics g) {
             g.setColor(Color.WHITE);
-            int debugInfoY = 0;
+            int debugInfoY = 50;
+            int debugInfoSeparation = 25;
             if(engine.showMetricsVideo) {
-                g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, debugInfoY + 25);
-                g.drawString("Video Frames: " + parentGGraphicsSystem.videoFrames, 0, debugInfoY + 50);
-                g.drawString("Video Frametime AVG: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotAvg + "ms", 0, debugInfoY + 75);
-                g.drawString("Video Frametime Lowest: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotLowest + "ms", 0, debugInfoY + 100);
-                g.drawString("Video Frametime Highest: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotHighest + "ms", 0, debugInfoY + 125);
-                debugInfoY += 125;
+                g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, debugInfoY);
+                g.drawString("Video Frames: " + parentGGraphicsSystem.videoFrames, 0, debugInfoY  + debugInfoSeparation);
+                g.drawString("Video Frametime AVG: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotAvg + "ms", 0, debugInfoY  + debugInfoSeparation*2);
+                g.drawString("Video Frametime Lowest: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotLowest + "ms", 0, debugInfoY + debugInfoSeparation*3);
+                g.drawString("Video Frametime Highest: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotHighest + "ms", 0, debugInfoY + debugInfoSeparation*4);
             }
         }
 
         public gPanel() {
-
+            this.setLayout(null);
+            this.setIgnoreRepaint(true);
         }
     }
 
@@ -76,6 +66,8 @@ public class graphicsSystem implements graphicsSystemI {
         private int width = 1024;  // defaults
         private int height = 768;  // defaults
         private double internalScale = 768.0;
+        private BufferStrategy bufferStrategy;
+        private gPanel panel;
 
         // longtime to get snapshots for ALL metrics
         private long frameMetricTimeMillis = System.currentTimeMillis() + 1000;
@@ -106,6 +98,10 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void setHeight(int height) {
             this.height = height;
+        }
+
+        public BufferStrategy getDrawStrategy() {
+            return this.bufferStrategy;
         }
 
         private void getVideoMetrics() {
@@ -150,20 +146,42 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void setPanel(gPanel panel) {
             panel.parentGGraphicsSystem = this;
+            panel.setBackground(Color.BLACK);
+            this.panel = panel;
+            this.panel.setPreferredSize(new Dimension(this.width, this.height));
+
             this.frame = new JFrame("Ballmaster Engine");
+            this.frame.setIgnoreRepaint(true);
             this.frame.setResizable(false);
             this.frame.setBackground(Color.BLACK);
-            panel.setBackground(Color.BLACK);
             this.frame.setPreferredSize(new Dimension(this.width, this.height));
+            this.frame.setBounds(0, 0, this.width, this.height);
             this.frame.setContentPane(panel);
             this.frame.pack();
             this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.frame.setLocationRelativeTo(null);
             this.frame.setVisible(true);
+            this.frame.createBufferStrategy(2);
+
+            this.bufferStrategy = this.frame.getBufferStrategy();
         }
 
         public void update() {
-            this.frame.repaint();
+            Graphics2D g = (Graphics2D) this.bufferStrategy.getDrawGraphics();
+
+            g.setColor(Color.black);
+            g.fillRect(0,0, this.width, this.height);
+
+            this.panel.draw(g);
+
+            getVideoMetrics();
+            this.panel.drawMetrics(g);
+        }
+
+        public void finish() {
+            Graphics2D g = (Graphics2D) this.bufferStrategy.getDrawGraphics();
+            g.dispose();
+            this.bufferStrategy.show();
         }
     }
 }
