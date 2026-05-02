@@ -4,14 +4,54 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 public class graphicsSystem implements graphicsSystemI {
+    public static class gCanvas extends Canvas implements graphicsSystemI.gCanvas {
+        private gGraphicsSystem parentGGraphicsSystem;
+        public int width = 640;
+        public int height = 480;
+        private BufferedImage view = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        public void init() {
+            this.createBufferStrategy(2);
+        }
+
+        public void render() {
+            BufferStrategy bs = this.getBufferStrategy();
+            Graphics g = view.getGraphics();
+
+            // Basic rendering logic
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, width, height);
+
+            g.setColor(Color.GREEN);
+            g.fillRect(0, 0, 320, 240);
+
+            g.setColor(Color.BLACK);
+            g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, 50);
+
+            g.dispose();
+
+            Graphics gScreen = bs.getDrawGraphics();
+            // This scales the tiny 'view' to the full size of the Canvas
+            gScreen.drawImage(view, 0, 0, this.parentGGraphicsSystem.width, this.parentGGraphicsSystem.height, null);
+
+            gScreen.dispose();
+
+            bs.show();
+
+            parentGGraphicsSystem.getVideoMetrics();
+        }
+    }
+
     public static class gPanel extends JPanel implements graphicsSystemI.gPanel {
         private gGraphicsSystem parentGGraphicsSystem;
         private AffineTransform savedTransform;
 
         @Override
-        public void paintComponent(Graphics g){
+        public void paintComponent(Graphics g) {
             super.paintComponent(g);
 
             draw(g);
@@ -30,8 +70,8 @@ public class graphicsSystem implements graphicsSystemI {
             g.translate((int)((double)parentGGraphicsSystem.width/2.0), (int)((double)parentGGraphicsSystem.height/2.0));
 
             // scale the world according to screen height
-            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.height);
-            ((Graphics2D) g).scale(scaleFactor, scaleFactor);
+            this.scaleToScreen(g);
+
 
         }
 
@@ -49,6 +89,10 @@ public class graphicsSystem implements graphicsSystemI {
             ((Graphics2D) g).setTransform(this.savedTransform);
 
             // scale ui text according to window screen height
+            this.scaleToScreen(g);
+        }
+
+        private void scaleToScreen(Graphics g) {
             double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.height);
             ((Graphics2D) g).scale(scaleFactor, scaleFactor);
         }
@@ -73,9 +117,10 @@ public class graphicsSystem implements graphicsSystemI {
 
     public static class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
         private JFrame frame;
+        public gCanvas canvas;
         private int width = 1024;  // defaults
         private int height = 768;  // defaults
-        private double internalScale = 768.0;
+        private double internalScale = 480.0;
 
         // longtime to get snapshots for ALL metrics
         private long frameMetricTimeMillis = System.currentTimeMillis() + 1000;
@@ -148,22 +193,46 @@ public class graphicsSystem implements graphicsSystemI {
 
         }
 
-        public void setPanel(gPanel panel) {
-            panel.parentGGraphicsSystem = this;
+        public void init(gCanvas canvas) {
+            this.canvas = canvas;
+            canvas.parentGGraphicsSystem = this;
             this.frame = new JFrame("Ballmaster Engine");
+            this.frame.setLayout(null);
             this.frame.setResizable(false);
             this.frame.setBackground(Color.BLACK);
-            panel.setBackground(Color.BLACK);
-            this.frame.setPreferredSize(new Dimension(this.width, this.height));
-            this.frame.setContentPane(panel);
-            this.frame.pack();
+            this.frame.setSize(new Dimension(this.width, this.height));
+            canvas.setPreferredSize(new Dimension(width, height));
+            canvas.setBounds(0,0,width,height);
+            this.frame.add(canvas);
             this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.frame.setLocationRelativeTo(null);
+//            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+//                    .getDefaultScreenDevice();
+//            gd.setFullScreenWindow(this.frame);
             this.frame.setVisible(true);
+            canvas.init();
         }
 
+//        public void setPanel(gPanel panel) {
+//            panel.parentGGraphicsSystem = this;
+//            this.frame = new JFrame("Ballmaster Engine");
+//            this.frame.setResizable(false);
+//            this.frame.setBackground(Color.BLACK);
+//            panel.setBackground(Color.BLACK);
+//            this.frame.setPreferredSize(new Dimension(this.width, this.height));
+//            this.frame.setContentPane(panel);
+//            this.frame.pack();
+//            this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            this.frame.setLocationRelativeTo(null);
+////            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+////                    .getDefaultScreenDevice();
+////            gd.setFullScreenWindow(this.frame);
+//            this.frame.setVisible(true);
+//        }
+
         public void update() {
-            this.frame.repaint();
+//            this.frame.repaint();
+            this.canvas.render();
         }
     }
 }

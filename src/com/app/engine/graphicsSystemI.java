@@ -3,6 +3,10 @@ package com.app.engine;
 import java.awt.Graphics;
 
 public interface graphicsSystemI {
+    interface gCanvas {
+        void render();
+    }
+
     interface gPanel {
         void draw(Graphics g);
         void setCameraTransform(Graphics g, camera c);
@@ -15,6 +19,7 @@ public interface graphicsSystemI {
         void setWidth(int width);
         int getHeight();
         void setHeight(int height);
-        void setPanel(graphicsSystem.gPanel panel);
+//        void setPanel(graphicsSystem.gPanel panel);
+        void init(graphicsSystem.gCanvas canvas);
     }
 }
