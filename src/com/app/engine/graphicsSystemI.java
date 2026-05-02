@@ -1,6 +1,7 @@
 package com.app.engine;
 
 import java.awt.Graphics;
+import java.util.HashMap;
 
 public interface graphicsSystemI {
     interface gCanvas {
@@ -21,5 +22,6 @@ public interface graphicsSystemI {
         void setHeight(int height);
 //        void setPanel(graphicsSystem.gPanel panel);
         void init(graphicsSystem.gCanvas canvas);
+        HashMap<String, Number> getVideoMetrics();
     }
 }

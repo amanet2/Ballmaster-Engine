@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 public class graphicsSystem implements graphicsSystemI {
     public static class gCanvas extends Canvas implements graphicsSystemI.gCanvas {
@@ -42,7 +44,7 @@ public class graphicsSystem implements graphicsSystemI {
 
             bs.show();
 
-            parentGGraphicsSystem.getVideoMetrics();
+            parentGGraphicsSystem.setVideoMetrics();
         }
     }
 
@@ -56,7 +58,7 @@ public class graphicsSystem implements graphicsSystemI {
 
             draw(g);
 
-            parentGGraphicsSystem.getVideoMetrics();
+            parentGGraphicsSystem.setVideoMetrics();
             drawMetrics(g);
 
             g.dispose();
@@ -153,7 +155,19 @@ public class graphicsSystem implements graphicsSystemI {
             this.height = height;
         }
 
-        private void getVideoMetrics() {
+        public HashMap<String, Number> getVideoMetrics() {
+            return new HashMap<>(
+                    Map.of(
+                            "videoFramesPerSecondMetricSnapshot", videoFramesPerSecondMetricSnapshot,
+                            "videoFrames", videoFrames,
+                            "videoFrametimeMetricSnapshotAvg", videoFrametimeMetricSnapshotAvg,
+                            "videoFrametimeMetricSnapshotLowest", videoFrametimeMetricSnapshotLowest,
+                            "videoFrametimeMetricSnapshotHighest", videoFrametimeMetricSnapshotHighest
+                    )
+            );
+        }
+
+        private void setVideoMetrics() {
             long currentTimeNanos = System.nanoTime();  // TODO: Use this for video frametime measurements
             long currentTimeMillis = System.currentTimeMillis();
 
