@@ -13,7 +13,7 @@ public class graphicsSystem implements graphicsSystemI {
         private gGraphicsSystem parentGGraphicsSystem;
         private BufferedImage view;
         private Graphics graphics;
-        public AffineTransform savedTransform;
+        private AffineTransform savedTransform;
 
         public void init() {
             view = new BufferedImage(
@@ -26,13 +26,13 @@ public class graphicsSystem implements graphicsSystemI {
 
         public Graphics getGraphics() {
             if(graphics == null)
-                graphics = view.getGraphics();
+                graphics = view.createGraphics();
             return graphics;
         }
 
-        public Graphics resetGraphics() {
-            graphics = view.getGraphics();
-            return graphics;
+        private void resetGraphics() {
+            graphics.dispose();
+            graphics = null;
         }
 
         public void clear() {
@@ -48,8 +48,7 @@ public class graphicsSystem implements graphicsSystemI {
         }
 
         public void render() {
-            this.getGraphics().dispose();
-            this.graphics = null;
+            resetGraphics();
 
             BufferStrategy bs = this.getBufferStrategy();
 
@@ -62,7 +61,7 @@ public class graphicsSystem implements graphicsSystemI {
             parentGGraphicsSystem.setVideoMetrics();
         }
 
-        public void setCameraTransform(camera c) {
+        private void setCameraTransform(camera c) {
             Graphics g = this.getGraphics();
 
             // move world to match camera coords
@@ -74,14 +73,14 @@ public class graphicsSystem implements graphicsSystemI {
             ((Graphics2D) g).scale(cameraZoom, cameraZoom);
         }
 
-        public void scaleToScreen() {
+        private void scaleToScreen() {
             Graphics g = this.getGraphics();
 
             double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.renderH);
             ((Graphics2D) g).scale(scaleFactor, scaleFactor);
         }
 
-        public void restoreScaledTransform() {
+        private void restoreTransform() {
             Graphics g = this.getGraphics();
 
             ((Graphics2D) g).setTransform(this.savedTransform);
@@ -91,17 +90,16 @@ public class graphicsSystem implements graphicsSystemI {
 
     public static class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
         private JFrame frame;
-        public gCanvas canvas;
-        public boolean fullscreen = false;
+        private gCanvas canvas;
+
+        private boolean fullscreen = false;
         private int windowW = 640;  // defaults
         private int windowH = 480;  // defaults
-        public int renderW = 640;
-        public int renderH = 480;
+        private int renderW = 640;
+        private int renderH = 480;
         private double internalScale = 480.0;
 
-        // longtime to get snapshots for ALL metrics
         private long frameMetricTimeMillis = System.currentTimeMillis() + 1000;
-
         private int videoFrames = 0;
         private int videoFramesPerSecondMetric = 0;
         private int videoFramesPerSecondMetricSnapshot = 0;
@@ -113,6 +111,30 @@ public class graphicsSystem implements graphicsSystemI {
         private double videoFrametimeMetricSnapshotAvg = 0;
         private double videoFrametimeMetricHighest = 0;
         private double videoFrametimeMetricSnapshotHighest = 0;
+
+        public boolean getFullscreen() {
+            return this.fullscreen;
+        }
+
+        public void setFullscreen(boolean fullscreen) {
+            this.fullscreen = fullscreen;
+        }
+
+        public int getRenderW() {
+            return this.renderW;
+        }
+
+        public void setRenderW(int renderW) {
+            this.renderW = renderW;
+        }
+
+        public int getRenderH() {
+            return this.renderH;
+        }
+
+        public void setRenderH(int renderH) {
+            this.renderH = renderH;
+        }
 
         public int getWindowW() {
             return this.windowW;
@@ -217,6 +239,18 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void update() {
             this.canvas.render();
+        }
+
+        public void setCameraTransform(camera c) {
+            this.canvas.setCameraTransform(c);
+        }
+
+        public void restoreTransform() {
+            this.canvas.restoreTransform();
+        }
+
+        public Graphics getGraphics() {
+            return this.canvas.getGraphics();
         }
     }
 }

@@ -5,14 +5,9 @@ import java.util.HashMap;
 
 public interface graphicsSystemI {
     interface gCanvas {
+        void init();
         void clear();
         void render();
-    }
-
-    interface gPanel {
-        void draw(Graphics g);
-        void setCameraTransform(Graphics g, camera c);
-        void restoreScaledTransform(Graphics g);
     }
 
     interface gGraphicsSystem {
@@ -21,8 +16,10 @@ public interface graphicsSystemI {
         void setWindowW(int windowW);
         int getWindowH();
         void setWindowH(int windowH);
-//        void setPanel(graphicsSystem.gPanel panel);
         void init(graphicsSystem.gCanvas canvas);
         HashMap<String, Number> getVideoMetrics();
+        void setCameraTransform(camera c);
+        void restoreTransform();
+        Graphics getGraphics();
     }
 }

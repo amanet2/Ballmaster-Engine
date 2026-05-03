@@ -152,17 +152,17 @@ public class engine {
     }
 
     private void registerDefaultCVars() {
-        cVarSystem.gCVar cVarRRenderWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.renderW)) {
+        cVarSystem.gCVar cVarRRenderWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getRenderW())) {
             @Override
             public void onChange() {
-                gGraphicsSystem.renderW = Integer.parseInt(this.getValue());
+                gGraphicsSystem.setRenderW(Integer.parseInt(this.getValue()));
             }
         };
 
-        cVarSystem.gCVar cVarRRenderHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.renderH)) {
+        cVarSystem.gCVar cVarRRenderHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getRenderH())) {
             @Override
             public void onChange() {
-                gGraphicsSystem.renderH = Integer.parseInt(this.getValue());
+                gGraphicsSystem.setRenderH(Integer.parseInt(this.getValue()));
             }
         };
 
@@ -180,10 +180,10 @@ public class engine {
             }
         };
 
-        cVarSystem.gCVar cVarRFullscreen = new cVarSystem.gCVar(gGraphicsSystem.fullscreen ? "1" : "0") {
+        cVarSystem.gCVar cVarRFullscreen = new cVarSystem.gCVar(gGraphicsSystem.getFullscreen() ? "1" : "0") {
             @Override
             public void onChange() {
-                gGraphicsSystem.fullscreen = this.getValue().equalsIgnoreCase("1");
+                gGraphicsSystem.setFullscreen(this.getValue().equalsIgnoreCase("1"));
             }
         };
 
