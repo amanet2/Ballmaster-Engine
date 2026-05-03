@@ -12,11 +12,14 @@ import java.util.Map;
 public class graphicsSystem implements graphicsSystemI {
     public static class gCanvas extends Canvas implements graphicsSystemI.gCanvas {
         private gGraphicsSystem parentGGraphicsSystem;
-        public int width = 640;
-        public int height = 480;
-        private BufferedImage view = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        private BufferedImage view;
 
         public void init() {
+            view = new BufferedImage(
+                    parentGGraphicsSystem.renderW,
+                    parentGGraphicsSystem.renderH,
+                    BufferedImage.TYPE_INT_RGB
+            );
             this.createBufferStrategy(2);
         }
 
@@ -24,35 +27,36 @@ public class graphicsSystem implements graphicsSystemI {
             return view.getGraphics();
         }
 
-        public void draw() {
+        public void clear() {
             Graphics g = this.getGraphics();
 
-            // Basic rendering logic
             g.setColor(Color.BLACK);
-            g.fillRect(0, 0, width, height);
-
-            g.setColor(Color.GREEN);
-            g.fillRect(0, 0, 320, 240);
-
-            g.setColor(Color.BLACK);
-//            g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, 50);
-
-//            g.dispose();
+            g.fillRect(0, 0, parentGGraphicsSystem.renderW, parentGGraphicsSystem.renderH);
         }
 
         public void render() {
             this.getGraphics().dispose();
+
             BufferStrategy bs = this.getBufferStrategy();
 
-            Graphics gScreen = bs.getDrawGraphics();
-            // This scales the tiny 'view' to the full size of the Canvas
-            gScreen.drawImage(view, 0, 0, this.parentGGraphicsSystem.width, this.parentGGraphicsSystem.height, null);
-
-            gScreen.dispose();
+            Graphics g = bs.getDrawGraphics();
+            g.drawImage(view, 0, 0, this.parentGGraphicsSystem.windowW, this.parentGGraphicsSystem.windowH, null);
+            g.dispose();
 
             bs.show();
 
             parentGGraphicsSystem.setVideoMetrics();
+        }
+
+        public void setCameraTransform(camera c) {
+            Graphics g = this.getGraphics();
+            // move world to match camera coords
+            double[] cCoods = c.getCoords();
+            g.translate(-(int)cCoods[0], -(int)cCoods[1]);
+
+            //zoom in or out depending on camera setting
+            double cameraZoom = c.getZoom();
+            ((Graphics2D) g).scale(cameraZoom, cameraZoom);
         }
     }
 
@@ -77,7 +81,7 @@ public class graphicsSystem implements graphicsSystemI {
             this.savedTransform = ((Graphics2D) g).getTransform();
 
             // center the screen over 0,0
-            g.translate((int)((double)parentGGraphicsSystem.width/2.0), (int)((double)parentGGraphicsSystem.height/2.0));
+            g.translate((int)((double)parentGGraphicsSystem.windowW /2.0), (int)((double)parentGGraphicsSystem.windowH /2.0));
 
             // scale the world according to screen height
             this.scaleToScreen(g);
@@ -103,7 +107,7 @@ public class graphicsSystem implements graphicsSystemI {
         }
 
         private void scaleToScreen(Graphics g) {
-            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.height);
+            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.windowH);
             ((Graphics2D) g).scale(scaleFactor, scaleFactor);
         }
 
@@ -128,8 +132,11 @@ public class graphicsSystem implements graphicsSystemI {
     public static class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
         private JFrame frame;
         public gCanvas canvas;
-        private int width = 1024;  // defaults
-        private int height = 768;  // defaults
+        public boolean fullscreen = false;
+        private int windowW = 640;  // defaults
+        private int windowH = 480;  // defaults
+        public int renderW = 640;
+        public int renderH = 640;
         private double internalScale = 480.0;
 
         // longtime to get snapshots for ALL metrics
@@ -147,20 +154,20 @@ public class graphicsSystem implements graphicsSystemI {
         private double videoFrametimeMetricHighest = 0;
         private double videoFrametimeMetricSnapshotHighest = 0;
 
-        public int getWidth() {
-            return this.width;
+        public int getWindowW() {
+            return this.windowW;
         }
 
-        public void setWidth(int width) {
-            this.width = width;
+        public void setWindowW(int windowW) {
+            this.windowW = windowW;
         }
 
-        public int getHeight() {
-            return this.height;
+        public int getWindowH() {
+            return this.windowH;
         }
 
-        public void setHeight(int height) {
-            this.height = height;
+        public void setWindowH(int windowH) {
+            this.windowH = windowH;
         }
 
         public HashMap<String, Number> getVideoMetrics() {
@@ -222,15 +229,19 @@ public class graphicsSystem implements graphicsSystemI {
             this.frame.setLayout(null);
             this.frame.setResizable(false);
             this.frame.setBackground(Color.BLACK);
-            this.frame.setSize(new Dimension(this.width, this.height));
-            canvas.setPreferredSize(new Dimension(width, height));
-            canvas.setBounds(0,0,width,height);
+            if(this.fullscreen) {
+                GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+                gd.setFullScreenWindow(this.frame);
+                Rectangle r = gd.getDefaultConfiguration().getBounds();
+                this.windowW = r.width;
+                this.windowH = r.height;
+            }
+            this.frame.setSize(new Dimension(this.windowW, this.windowH));
+            canvas.setPreferredSize(new Dimension(windowW, windowH));
+            canvas.setBounds(0,0, windowW, windowH);
             this.frame.add(canvas);
             this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.frame.setLocationRelativeTo(null);
-//            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
-//                    .getDefaultScreenDevice();
-//            gd.setFullScreenWindow(this.frame);
             this.frame.setVisible(true);
             canvas.init();
         }

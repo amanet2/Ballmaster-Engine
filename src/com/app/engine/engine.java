@@ -158,17 +158,24 @@ public class engine {
                 engine.showMetricsVideo = this.getValue().equalsIgnoreCase("1");
             }
         };
-        cVarSystem.gCVar cVarRCustomHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getHeight())) {
+        cVarSystem.gCVar cVarRCustomHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWindowH())) {
             @Override
             public void onChange() {
-                gGraphicsSystem.setHeight(Integer.parseInt(this.getValue()));
+                gGraphicsSystem.setWindowH(Integer.parseInt(this.getValue()));
             }
         };
 
-        cVarSystem.gCVar cVarRCustomWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWidth())) {
+        cVarSystem.gCVar cVarRCustomWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWindowW())) {
             @Override
             public void onChange() {
-                gGraphicsSystem.setWidth(Integer.parseInt(this.getValue()));
+                gGraphicsSystem.setWindowW(Integer.parseInt(this.getValue()));
+            }
+        };
+
+        cVarSystem.gCVar cVarRFullscreen = new cVarSystem.gCVar(gGraphicsSystem.fullscreen ? "1" : "0") {
+            @Override
+            public void onChange() {
+                gGraphicsSystem.fullscreen = this.getValue().equalsIgnoreCase("1");
             }
         };
 
@@ -180,6 +187,7 @@ public class engine {
 //        gCVarSystem.registerCVar("com_showtimeelapsed", cVarComShowTimeElapsed);
 //        gCVarSystem.registerCVar("fs_spritespath", cVarFsSpriteFilesPath);
 //        gCVarSystem.registerCVar("fs_cfgpath", cVarFsCfgFilesPath);
+        gCVarSystem.registerCVar("r_fullscreen", cVarRFullscreen);
         gCVarSystem.registerCVar("r_customHeight", cVarRCustomHeight);
         gCVarSystem.registerCVar("r_customWidth", cVarRCustomWidth);
     }
