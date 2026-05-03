@@ -20,9 +20,12 @@ public class graphicsSystem implements graphicsSystemI {
             this.createBufferStrategy(2);
         }
 
-        public void render() {
-            BufferStrategy bs = this.getBufferStrategy();
-            Graphics g = view.getGraphics();
+        public Graphics getGraphics() {
+            return view.getGraphics();
+        }
+
+        public void draw() {
+            Graphics g = this.getGraphics();
 
             // Basic rendering logic
             g.setColor(Color.BLACK);
@@ -32,9 +35,14 @@ public class graphicsSystem implements graphicsSystemI {
             g.fillRect(0, 0, 320, 240);
 
             g.setColor(Color.BLACK);
-            g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, 50);
+//            g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, 50);
 
-            g.dispose();
+//            g.dispose();
+        }
+
+        public void render() {
+            this.getGraphics().dispose();
+            BufferStrategy bs = this.getBufferStrategy();
 
             Graphics gScreen = bs.getDrawGraphics();
             // This scales the tiny 'view' to the full size of the Canvas
