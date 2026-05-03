@@ -152,23 +152,31 @@ public class engine {
     }
 
     private void registerDefaultCVars() {
-        cVarSystem.gCVar cVarShowFps = new cVarSystem.gCVar(engine.showMetricsVideo ? "1" : "0") {
+        cVarSystem.gCVar cVarRRenderWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.renderW)) {
             @Override
             public void onChange() {
-                engine.showMetricsVideo = this.getValue().equalsIgnoreCase("1");
-            }
-        };
-        cVarSystem.gCVar cVarRCustomHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWindowH())) {
-            @Override
-            public void onChange() {
-                gGraphicsSystem.setWindowH(Integer.parseInt(this.getValue()));
+                gGraphicsSystem.renderW = Integer.parseInt(this.getValue());
             }
         };
 
-        cVarSystem.gCVar cVarRCustomWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWindowW())) {
+        cVarSystem.gCVar cVarRRenderHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.renderH)) {
+            @Override
+            public void onChange() {
+                gGraphicsSystem.renderH = Integer.parseInt(this.getValue());
+            }
+        };
+
+        cVarSystem.gCVar cVarRWindowWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWindowW())) {
             @Override
             public void onChange() {
                 gGraphicsSystem.setWindowW(Integer.parseInt(this.getValue()));
+            }
+        };
+
+        cVarSystem.gCVar cVarRWindowHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWindowH())) {
+            @Override
+            public void onChange() {
+                gGraphicsSystem.setWindowH(Integer.parseInt(this.getValue()));
             }
         };
 
@@ -182,13 +190,14 @@ public class engine {
 //        gCVarSystem.registerCVar("cam_xy", cVarCamXY);
 //        gCVarSystem.registerCVar("cam_zoom", cVarCamZoon);
 //        gCVarSystem.registerCVar("com_showcamerainfo", cVarShowCamInfo);
-        gCVarSystem.registerCVar("com_showfps", cVarShowFps);
 //        gCVarSystem.registerCVar("com_showframeinfo", cVarShowFrameInfo);
 //        gCVarSystem.registerCVar("com_showtimeelapsed", cVarComShowTimeElapsed);
 //        gCVarSystem.registerCVar("fs_spritespath", cVarFsSpriteFilesPath);
 //        gCVarSystem.registerCVar("fs_cfgpath", cVarFsCfgFilesPath);
         gCVarSystem.registerCVar("r_fullscreen", cVarRFullscreen);
-        gCVarSystem.registerCVar("r_customHeight", cVarRCustomHeight);
-        gCVarSystem.registerCVar("r_customWidth", cVarRCustomWidth);
+        gCVarSystem.registerCVar("r_windowWidth", cVarRWindowWidth);
+        gCVarSystem.registerCVar("r_windowHeight", cVarRWindowHeight);
+        gCVarSystem.registerCVar("r_renderWidth", cVarRRenderWidth);
+        gCVarSystem.registerCVar("r_renderHeight", cVarRRenderHeight);
     }
 }
