@@ -155,12 +155,12 @@ public class utils {
     }
 
     public static class gMath {
-        public static double scaleDoubleToWindowHeight(double input, double scale, int windowHeight) {
-            return (input / scale) * (double) windowHeight;
+        public static double scaleDoubleToWindowHeight(double input, double scale, int height) {
+            return (input / scale) * (double) height;
         }
 
-        public static double unscaleDoubleToWindowHeight(double input, double scale, int windowHeight) {
-            return (input * scale) / (double) windowHeight;
+        public static double unscaleDoubleToWindowHeight(double input, double scale, int height) {
+            return (input * scale) / (double) height;
         }
 
         public static int roundToNearest(int val, int nearest) {

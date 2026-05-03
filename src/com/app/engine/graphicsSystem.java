@@ -1,7 +1,6 @@
 package com.app.engine;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
@@ -13,6 +12,8 @@ public class graphicsSystem implements graphicsSystemI {
     public static class gCanvas extends Canvas implements graphicsSystemI.gCanvas {
         private gGraphicsSystem parentGGraphicsSystem;
         private BufferedImage view;
+        private Graphics graphics;
+        public AffineTransform savedTransform;
 
         public void init() {
             view = new BufferedImage(
@@ -24,18 +25,28 @@ public class graphicsSystem implements graphicsSystemI {
         }
 
         public Graphics getGraphics() {
-            return view.getGraphics();
+            if(graphics == null)
+                graphics = view.getGraphics();
+            return graphics;
         }
 
         public void clear() {
             Graphics g = this.getGraphics();
+            this.savedTransform = ((Graphics2D) g).getTransform();
 
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, parentGGraphicsSystem.renderW, parentGGraphicsSystem.renderH);
+
+            // center the canvas over 0,0
+            g.translate((int)((double)parentGGraphicsSystem.renderW /2.0), (int)((double)parentGGraphicsSystem.renderH /2.0));
+
+            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.renderH);
+            ((Graphics2D) g).scale(scaleFactor, scaleFactor);
         }
 
         public void render() {
             this.getGraphics().dispose();
+            this.graphics = null;
 
             BufferStrategy bs = this.getBufferStrategy();
 
@@ -50,82 +61,28 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void setCameraTransform(camera c) {
             Graphics g = this.getGraphics();
+
             // move world to match camera coords
-            double[] cCoods = c.getCoords();
-            g.translate(-(int)cCoods[0], -(int)cCoods[1]);
-
-            //zoom in or out depending on camera setting
-            double cameraZoom = c.getZoom();
-            ((Graphics2D) g).scale(cameraZoom, cameraZoom);
-        }
-    }
-
-    public static class gPanel extends JPanel implements graphicsSystemI.gPanel {
-        private gGraphicsSystem parentGGraphicsSystem;
-        private AffineTransform savedTransform;
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-
-            draw(g);
-
-            parentGGraphicsSystem.setVideoMetrics();
-            drawMetrics(g);
-
-            g.dispose();
-        }
-
-        public void draw(Graphics g) {
-            // to be overriden
-            this.savedTransform = ((Graphics2D) g).getTransform();
-
-            // center the screen over 0,0
-            g.translate((int)((double)parentGGraphicsSystem.windowW /2.0), (int)((double)parentGGraphicsSystem.windowH /2.0));
-
-            // scale the world according to screen height
-            this.scaleToScreen(g);
-
-
-        }
-
-        public void setCameraTransform(Graphics g, camera c) {
-            // move world to match camera coords
-            double[] cCoods = c.getCoords();
-            g.translate(-(int)cCoods[0], -(int)cCoods[1]);
+            double[] cCoords = c.getCoords();
+            g.translate(-(int)cCoords[0], -(int)cCoords[1]);
 
             //zoom in or out depending on camera setting
             double cameraZoom = c.getZoom();
             ((Graphics2D) g).scale(cameraZoom, cameraZoom);
         }
 
-        public void restoreScaledTransform(Graphics g) {
-            ((Graphics2D) g).setTransform(this.savedTransform);
+        public void scaleToScreen() {
+            Graphics g = this.getGraphics();
 
-            // scale ui text according to window screen height
-            this.scaleToScreen(g);
-        }
-
-        private void scaleToScreen(Graphics g) {
-            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.windowH);
+            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.renderH);
             ((Graphics2D) g).scale(scaleFactor, scaleFactor);
         }
 
-        private void drawMetrics(Graphics g) {
-            g.setColor(Color.WHITE);
-            int debugInfoY = 0;
-            if(engine.showMetricsVideo) {
-                g.drawString("Video FPS: " + parentGGraphicsSystem.videoFramesPerSecondMetricSnapshot, 0, debugInfoY + 25);
-                g.drawString("Video Frames: " + parentGGraphicsSystem.videoFrames, 0, debugInfoY + 50);
-                g.drawString("Video Frametime AVG: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotAvg + "ms", 0, debugInfoY + 75);
-                g.drawString("Video Frametime Lowest: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotLowest + "ms", 0, debugInfoY + 100);
-                g.drawString("Video Frametime Highest: " + parentGGraphicsSystem.videoFrametimeMetricSnapshotHighest + "ms", 0, debugInfoY + 125);
-                debugInfoY += 125;
-            }
-        }
+        public void restoreScaledTransform() {
+            Graphics g = this.getGraphics();
 
-        public gPanel() {
-
+            ((Graphics2D) g).setTransform(this.savedTransform);
+            this.scaleToScreen();
         }
     }
 
@@ -136,7 +93,7 @@ public class graphicsSystem implements graphicsSystemI {
         private int windowW = 640;  // defaults
         private int windowH = 480;  // defaults
         public int renderW = 640;
-        public int renderH = 640;
+        public int renderH = 480;
         private double internalScale = 480.0;
 
         // longtime to get snapshots for ALL metrics
@@ -225,10 +182,13 @@ public class graphicsSystem implements graphicsSystemI {
         public void init(gCanvas canvas) {
             this.canvas = canvas;
             canvas.parentGGraphicsSystem = this;
+
             this.frame = new JFrame("Ballmaster Engine");
-            this.frame.setLayout(null);
+            this.frame.setLayout(new BorderLayout());
+            this.frame.add(canvas, BorderLayout.CENTER);
             this.frame.setResizable(false);
             this.frame.setBackground(Color.BLACK);
+
             if(this.fullscreen) {
                 GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
                 gd.setFullScreenWindow(this.frame);
@@ -236,35 +196,19 @@ public class graphicsSystem implements graphicsSystemI {
                 this.windowW = r.width;
                 this.windowH = r.height;
             }
+
             this.frame.setSize(new Dimension(this.windowW, this.windowH));
-            canvas.setPreferredSize(new Dimension(windowW, windowH));
-            canvas.setBounds(0,0, windowW, windowH);
+            canvas.setSize(new Dimension(renderW, renderH));
+
             this.frame.add(canvas);
             this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.frame.setLocationRelativeTo(null);
             this.frame.setVisible(true);
+
             canvas.init();
         }
 
-//        public void setPanel(gPanel panel) {
-//            panel.parentGGraphicsSystem = this;
-//            this.frame = new JFrame("Ballmaster Engine");
-//            this.frame.setResizable(false);
-//            this.frame.setBackground(Color.BLACK);
-//            panel.setBackground(Color.BLACK);
-//            this.frame.setPreferredSize(new Dimension(this.width, this.height));
-//            this.frame.setContentPane(panel);
-//            this.frame.pack();
-//            this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//            this.frame.setLocationRelativeTo(null);
-////            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
-////                    .getDefaultScreenDevice();
-////            gd.setFullScreenWindow(this.frame);
-//            this.frame.setVisible(true);
-//        }
-
         public void update() {
-//            this.frame.repaint();
             this.canvas.render();
         }
     }
