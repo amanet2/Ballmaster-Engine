@@ -30,6 +30,11 @@ public class graphicsSystem implements graphicsSystemI {
             return graphics;
         }
 
+        public Graphics resetGraphics() {
+            graphics = view.getGraphics();
+            return graphics;
+        }
+
         public void clear() {
             Graphics g = this.getGraphics();
             this.savedTransform = ((Graphics2D) g).getTransform();
@@ -39,9 +44,7 @@ public class graphicsSystem implements graphicsSystemI {
 
             // center the canvas over 0,0
             g.translate((int)((double)parentGGraphicsSystem.renderW /2.0), (int)((double)parentGGraphicsSystem.renderH /2.0));
-
-            double scaleFactor = utils.gMath.scaleDoubleToWindowHeight(1.0, parentGGraphicsSystem.internalScale, parentGGraphicsSystem.renderH);
-            ((Graphics2D) g).scale(scaleFactor, scaleFactor);
+            this.scaleToScreen();
         }
 
         public void render() {
@@ -130,6 +133,10 @@ public class graphicsSystem implements graphicsSystemI {
         public HashMap<String, Number> getVideoMetrics() {
             return new HashMap<>(
                     Map.of(
+                            "videoRenderW", this.renderW,
+                            "videoRenderH", this.renderH,
+                            "videoWindowW", this.windowW,
+                            "videoWindowH", this.windowH,
                             "videoFramesPerSecondMetricSnapshot", videoFramesPerSecondMetricSnapshot,
                             "videoFrames", videoFrames,
                             "videoFrametimeMetricSnapshotAvg", videoFrametimeMetricSnapshotAvg,
