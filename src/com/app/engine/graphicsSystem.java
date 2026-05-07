@@ -61,18 +61,6 @@ public class graphicsSystem implements graphicsSystemI {
             parentGGraphicsSystem.setVideoMetrics();
         }
 
-        private void setCameraTransform(camera c) {
-            Graphics g = this.getGraphics();
-
-            // move world to match camera coords
-            double[] cCoords = c.getCoords();
-            g.translate(-(int)cCoords[0], -(int)cCoords[1]);
-
-            //zoom in or out depending on camera setting
-            double cameraZoom = c.getZoom();
-            ((Graphics2D) g).scale(cameraZoom, cameraZoom);
-        }
-
         private void scaleToScreen() {
             Graphics g = this.getGraphics();
 
@@ -239,10 +227,6 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void update() {
             this.canvas.render();
-        }
-
-        public void setCameraTransform(camera c) {
-            this.canvas.setCameraTransform(c);
         }
 
         public void restoreTransform() {

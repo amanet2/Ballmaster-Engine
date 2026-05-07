@@ -18,7 +18,6 @@ public interface graphicsSystemI {
         void setWindowH(int windowH);
         void init(graphicsSystem.gCanvas canvas);
         HashMap<String, Number> getVideoMetrics();
-        void setCameraTransform(camera c);
         void restoreTransform();
         Graphics getGraphics();
     }
