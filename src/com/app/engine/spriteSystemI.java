@@ -1,10 +1,11 @@
 package com.app.engine;
 
-import java.awt.Image;
+import java.awt.*;
 
 public interface spriteSystemI {
     interface gSprite {
         Image getImage();
+        void draw(Graphics g, int x, int y);
     }
 
     interface gSpriteSystem {

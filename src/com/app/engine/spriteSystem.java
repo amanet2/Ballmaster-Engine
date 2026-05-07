@@ -1,7 +1,7 @@
 package com.app.engine;
 
 import javax.swing.ImageIcon;
-import java.awt.Image;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +15,14 @@ public class spriteSystem implements spriteSystemI {
 
         public Image getImage() {
             return this.image;
+        }
+
+        public void draw(Graphics g, int x, int y) {
+            g.drawImage(getImage(), x, y,null);
+        }
+
+        public void draw(Graphics g, int x, int y, int w, int h) {
+            g.drawImage(getImage(), x, y, w, h, null);
         }
     }
 
