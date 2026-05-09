@@ -11,14 +11,24 @@ public interface graphicsSystemI {
     }
 
     interface gGraphicsSystem {
-        void update();
-        int getWindowW();
-        void setWindowW(int windowW);
-        int getWindowH();
-        void setWindowH(int windowH);
         void init(graphicsSystem.gCanvas canvas);
-        HashMap<String, Number> getVideoMetrics();
-        void restoreTransform();
+        void update();
+
         Graphics getGraphics();
+
+        void setRenderDims(int[] dims);
+        int[] getRenderDims();
+        int getRenderW();
+        int getRenderH();
+
+        void setWindowDims(int[] dims);
+        int[] getWindowDims();
+        int getWindowW();
+        int getWindowH();
+
+        void setCameraTransform(camera c);
+        void restoreTransform();
+
+        HashMap<String, Number> getVideoMetrics();
     }
 }

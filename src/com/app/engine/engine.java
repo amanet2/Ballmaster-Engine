@@ -9,6 +9,8 @@ import com.app.engine.inputSystem.gMouse;
 import com.app.engine.schedulerSystem.gSchedulerSystem;
 import com.app.engine.spriteSystem.gSpriteSystem;
 
+import java.util.Arrays;
+
 public class engine {
     public static boolean showMetricsVideo = false;
 
@@ -152,31 +154,19 @@ public class engine {
     }
 
     private void registerDefaultCVars() {
-        cVarSystem.gCVar cVarRRenderWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getRenderW())) {
+        cVarSystem.gCVar cVarRenderDims = new cVarSystem.gCVar(Arrays.toString(gGraphicsSystem.getRenderDims())) {
             @Override
             public void onChange() {
-                gGraphicsSystem.setRenderW(Integer.parseInt(this.getValue()));
+                String[] args = this.getValue().split(",");
+                gGraphicsSystem.setRenderDims(new int[]{Integer.parseInt(args[0]), Integer.parseInt(args[1])});
             }
         };
 
-        cVarSystem.gCVar cVarRRenderHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getRenderH())) {
+        cVarSystem.gCVar cVarWindowDims = new cVarSystem.gCVar(Arrays.toString(gGraphicsSystem.getWindowDims())) {
             @Override
             public void onChange() {
-                gGraphicsSystem.setRenderH(Integer.parseInt(this.getValue()));
-            }
-        };
-
-        cVarSystem.gCVar cVarRWindowWidth = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWindowW())) {
-            @Override
-            public void onChange() {
-                gGraphicsSystem.setWindowW(Integer.parseInt(this.getValue()));
-            }
-        };
-
-        cVarSystem.gCVar cVarRWindowHeight = new cVarSystem.gCVar(Integer.toString(gGraphicsSystem.getWindowH())) {
-            @Override
-            public void onChange() {
-                gGraphicsSystem.setWindowH(Integer.parseInt(this.getValue()));
+                String[] args = this.getValue().split(",");
+                gGraphicsSystem.setWindowDims(new int[]{Integer.parseInt(args[0]), Integer.parseInt(args[1])});
             }
         };
 
@@ -195,9 +185,7 @@ public class engine {
 //        gCVarSystem.registerCVar("fs_spritespath", cVarFsSpriteFilesPath);
 //        gCVarSystem.registerCVar("fs_cfgpath", cVarFsCfgFilesPath);
         gCVarSystem.registerCVar("r_fullscreen", cVarRFullscreen);
-        gCVarSystem.registerCVar("r_windowWidth", cVarRWindowWidth);
-        gCVarSystem.registerCVar("r_windowHeight", cVarRWindowHeight);
-        gCVarSystem.registerCVar("r_renderWidth", cVarRRenderWidth);
-        gCVarSystem.registerCVar("r_renderHeight", cVarRRenderHeight);
+        gCVarSystem.registerCVar("r_window_dims", cVarWindowDims);
+        gCVarSystem.registerCVar("r_render_dims", cVarRenderDims);
     }
 }
