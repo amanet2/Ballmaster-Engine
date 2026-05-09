@@ -128,6 +128,7 @@ public class graphicsSystem implements graphicsSystemI {
         private double videoFrametimeMetricSnapshotHighest = 0;
 
         public boolean getFullscreen() {
+            System.out.println("ASDFSDF");
             return this.fullscreen;
         }
 
@@ -249,6 +250,14 @@ public class graphicsSystem implements graphicsSystemI {
             canvas.init();
         }
 
+        public JFrame getFrame() {
+            return this.frame;
+        }
+
+        public Canvas getCanvas() {
+            return this.canvas;
+        }
+
         public void update() {
             this.canvas.render();
         }
@@ -287,25 +296,20 @@ public class graphicsSystem implements graphicsSystemI {
     }
 
     public static class gSpriteSystem implements graphicsSystemI.gSpriteSystem {
-        private Map<String, ImageIcon> baseImages;
-        private HashMap<String, gSprite> scaledSprites;
+        // TODO: use filesystem to get base files for sprites
+        private HashMap<String, gSprite> sprites;
 
         public gSpriteSystem() {
-            this.baseImages = new HashMap<>();
-            this.scaledSprites = new HashMap<>();
+            this.sprites = new HashMap<>();
         }
 
-        public gSprite getScaledSprite(String path, int width, int height) {
+        public gSprite getSprite(String path) {
             if(path.equalsIgnoreCase("none"))
                 return null;
 
-            this.baseImages.putIfAbsent(path, new ImageIcon(path));
+            this.sprites.putIfAbsent(path, new gSprite(new ImageIcon(path).getImage()));
 
-            String name = String.format("%s%d%d", path, width, height);
-
-            this.scaledSprites.putIfAbsent(name, new gSprite(this.baseImages.get(path).getImage().getScaledInstance(width, height, Image.SCALE_FAST)));
-
-            return this.scaledSprites.get(name);
+            return this.sprites.get(path);
         }
     }
 }

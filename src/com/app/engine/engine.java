@@ -7,6 +7,8 @@ import com.app.engine.graphicsSystem.gGraphicsSystem;
 import com.app.engine.inputSystem.gKeyboard;
 import com.app.engine.inputSystem.gMouse;
 import com.app.engine.schedulerSystem.gSchedulerSystem;
+import com.app.engine.fileSystem.gBaseFileSystem;
+import com.app.engine.fileSystem.gFile;
 
 import java.util.Arrays;
 
@@ -28,13 +30,9 @@ public class engine {
     public gCVarSystem gCVarSystem;
 
     // wrapper for multiple-instance class
-    public fileSystem fileSystem;
+    public gBaseFileSystem gBaseFileSystem;
 
     public gGraphicsSystem gGraphicsSystem;
-
-    // singletons
-    public gKeyboard gKeyboard;
-    public gMouse gMouse;
 
     // singleton
     public gSchedulerSystem gSchedulerSystem;
@@ -47,12 +45,9 @@ public class engine {
 
         this.gCVarSystem = new gCVarSystem();
 
-        this.fileSystem = new fileSystem();
+        this.gBaseFileSystem = new gBaseFileSystem();
 
         this.gGraphicsSystem = new gGraphicsSystem();
-
-        this.gKeyboard = new gKeyboard();
-        this.gMouse = new gMouse();
 
         this.gSchedulerSystem = new gSchedulerSystem();
 
@@ -71,6 +66,18 @@ public class engine {
             public String doCommand(String[] args) {
                 System.out.print("\033\143");
                 return "";
+            }
+        };
+        gConsoleCommand gConsoleCommandExec = new gConsoleCommand("execute cfg file") {
+            @Override
+            public String doCommand(String[] args) {
+                if(args.length < 1 || args[0].trim().isEmpty())
+                    return "For executing a cfg file. Usage: exec CFG_FILE";
+                String path = args[0].trim();
+                gFile file = gBaseFileSystem.getFileSystemConfig().getRootDirectory().getFile(path);
+                if (file == null)
+                    return "null";
+                return gConsoleSystem.execCfgFile(file);
             }
         };
         gConsoleCommand gConsoleCommandEcho = new gConsoleCommand("prints text") {
@@ -130,19 +137,49 @@ public class engine {
                 return gCVarSystem.getCVarValue(args[0]);
             }
         };
+        gConsoleCommand gConsoleCommandListFiles = new gConsoleCommand("lists cfg files") {
+            @Override
+            public String doCommand(String[] args) {
+                return "coming soon";
+            }
+        };
+        gConsoleCommand gConsoleCommandListFilesScripts = new gConsoleCommand("lists script files") {
+            @Override
+            public String doCommand(String[] args) {
+                return "coming soon";
+            }
+        };
+        gConsoleCommand gConsoleCommandListSprites = new gConsoleCommand("lists sprite files") {
+            @Override
+            public String doCommand(String[] args) {
+                return "coming soon";
+            }
+        };
+        gConsoleCommand gConsoleCommandScript = new gConsoleCommand("executes a line of script") {
+            @Override
+            public String doCommand(String[] args) {
+                return "coming soon";
+            }
+        };
+        gConsoleCommand gConsoleCommandScriptFile = new gConsoleCommand("executes a script file") {
+            @Override
+            public String doCommand(String[] args) {
+                return "coming soon";
+            }
+        };
 
         gConsoleSystem.registerCmd("clear", gConsoleCommandClear);
         gConsoleSystem.registerCmd("echo", gConsoleCommandEcho);
-//        gConsoleSystem.registerCmd("exec", gConsoleCommandExec);
+        gConsoleSystem.registerCmd("exec", gConsoleCommandExec);
         gConsoleSystem.registerCmd("exit", gConsoleCommandQuit);
         gConsoleSystem.registerCmd("listCmds", gConsoleCommandListCmds);
         gConsoleSystem.registerCmd("listCVars", gConsoleCommandListCVars);
-//        gConsoleSystem.registerCmd("listFilesCfg", gConsoleCommandListFiles);
-//        gConsoleSystem.registerCmd("listFilesScripts", gConsoleCommandListFilesScripts);
-//        gConsoleSystem.registerCmd("listFilesSprites", gConsoleCommandListSprites);
+        gConsoleSystem.registerCmd("listFilesCfg", gConsoleCommandListFiles);
+        gConsoleSystem.registerCmd("listFilesScripts", gConsoleCommandListFilesScripts);
+        gConsoleSystem.registerCmd("listFilesSprites", gConsoleCommandListSprites);
         gConsoleSystem.registerCmd("quit", gConsoleCommandQuit);
-//        gConsoleSystem.registerCmd("script", gConsoleCommandScript);
-//        gConsoleSystem.registerCmd("scriptFile", gConsoleCommandScriptFile);
+        gConsoleSystem.registerCmd("script", gConsoleCommandScript);
+        gConsoleSystem.registerCmd("scriptFile", gConsoleCommandScriptFile);
         gConsoleSystem.registerCmd("set", gConsoleCommandSet);
         gConsoleSystem.registerCmd("vstr", gConsoleCommandVstr);
     }

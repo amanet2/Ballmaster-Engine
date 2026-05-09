@@ -36,6 +36,6 @@ public interface graphicsSystemI {
     }
 
     interface gSpriteSystem {
-        gSprite getScaledSprite(String name, int width, int height);
+        gSprite getSprite(String name);
     }
 }

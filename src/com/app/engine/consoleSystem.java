@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeSet;
 
+import com.app.engine.fileSystem.gFile;
+
 public class consoleSystem implements consoleSystemI {
     public static class gConsoleCommand implements consoleSystemI.gConsoleCommand {
         private String description;
@@ -46,6 +48,17 @@ public class consoleSystem implements consoleSystemI {
                 ce.printStackTrace();
             }
             return "null";
+        }
+
+        public String execCfgFile(gFile file) {
+            // TODO: apply lexing & parsing so comments '#' can be anywhere in the line
+            for(String line : file.getFileLines()) {
+                if(!line.trim().startsWith((";")) || !line.trim().startsWith("#")) {
+                    System.out.println("% " + line);
+                    System.out.println(this.readLine(line));
+                }
+            }
+            return "";
         }
 
         public void registerCmd(String name, gConsoleCommand command) {

@@ -75,6 +75,18 @@ public class fileSystem implements fileSystemI {
             return this.files;
         }
 
+        public gFile getFile(String path) {
+            for(gFile f : this.getFiles()) {
+                if(f.getName().equals(path))
+                    return f;
+            }
+            for(gDirectory d : this.getSubDirectories()) {
+                gFile df = d.getFile(path);
+                if(df != null) return df;
+            }
+            return null;
+        }
+
         public gDirectory[] getSubDirectories() {
             return this.subDirectories;
         }
@@ -90,5 +102,39 @@ public class fileSystem implements fileSystemI {
         public gFileSystem(String path) {
             this.rootDirectory = new gDirectory(null, path);
         }
+    }
+
+    public static class gBaseFileSystem implements fileSystemI.gBaseFileSystem {
+        private static String pathBase = "base";
+        private static String pathConfig = getPath("config");
+        private static String pathScripts = getPath("scripts");
+        private static String pathSprites = getPath("data");
+
+        private static gFileSystem fileSystemConfig;
+        private static gFileSystem fileSystemScripts;
+        private static gFileSystem fileSystemSprites;
+
+        public gBaseFileSystem() {
+            fileSystemConfig = new gFileSystem(pathConfig);
+            fileSystemScripts = new gFileSystem(pathScripts);
+            fileSystemSprites = new gFileSystem(pathSprites);
+        }
+
+        public static String getPath(String path) {
+            return "%s/%s".formatted(pathBase, path);
+        }
+
+        public gFileSystem getFileSystemConfig() {
+            return fileSystemConfig;
+        }
+
+        public gFileSystem getFileSystemScripts() {
+            return fileSystemScripts;
+        }
+
+        public gFileSystem getFileSystemSprites() {
+            return fileSystemSprites;
+        }
+
     }
 }

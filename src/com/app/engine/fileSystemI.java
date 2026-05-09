@@ -17,4 +17,12 @@ public interface fileSystemI {
     interface gFileSystem {
         gDirectory getRootDirectory();
     }
+
+    interface gBaseFileSystem {
+        gFileSystem getFileSystemConfig();
+
+        gFileSystem getFileSystemScripts();
+
+        gFileSystem getFileSystemSprites();
+    }
 }
