@@ -128,7 +128,6 @@ public class graphicsSystem implements graphicsSystemI {
         private double videoFrametimeMetricSnapshotHighest = 0;
 
         public boolean getFullscreen() {
-            System.out.println("ASDFSDF");
             return this.fullscreen;
         }
 
