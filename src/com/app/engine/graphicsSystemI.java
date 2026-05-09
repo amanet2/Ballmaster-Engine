@@ -27,7 +27,6 @@ public interface graphicsSystemI {
         int getWindowH();
 
         void setCameraTransform(camera c);
-        void restoreTransform();
 
         HashMap<String, Number> getVideoMetrics();
     }

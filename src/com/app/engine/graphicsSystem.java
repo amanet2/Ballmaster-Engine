@@ -14,6 +14,7 @@ public class graphicsSystem implements graphicsSystemI {
         private BufferedImage view;
         private Graphics graphics;
         private AffineTransform savedTransform;
+        private boolean restoreTransform;
 
         public void init() {
             view = new BufferedImage(
@@ -38,6 +39,7 @@ public class graphicsSystem implements graphicsSystemI {
         public void clear() {
             Graphics g = this.getGraphics();
             this.savedTransform = ((Graphics2D) g).getTransform();
+            restoreTransform = false;
 
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, parentGGraphicsSystem.getRenderW(), parentGGraphicsSystem.getRenderH());
@@ -83,6 +85,11 @@ public class graphicsSystem implements graphicsSystemI {
         }
 
         public void setCameraTransform(camera c) {
+            if (restoreTransform)
+                restoreTransform();
+            else
+                restoreTransform = true;
+
             Graphics g = this.getGraphics();
 
             // move world to match camera coords
@@ -254,10 +261,6 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void setCameraTransform(camera c) {
             this.canvas.setCameraTransform(c);
-        }
-
-        public void restoreTransform() {
-            this.canvas.restoreTransform();
         }
 
         public Graphics getGraphics() {
