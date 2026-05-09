@@ -2,13 +2,44 @@ package com.app.engine;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
 
 public class inputSystem {
+    public static class gInputSystem {
+        public HashMap<Integer, impulse> bindings = new HashMap<>();
+
+        private gKeyboard keyboard;
+        private gMouse mouse;
+
+        public void bind(Integer e, impulse i) {
+            bindings.put(e, i);
+        }
+
+        public void init() {
+            keyboard = new gKeyboard();
+            mouse = new gMouse();
+
+            keyboard.parentGInputSystem = this;
+            mouse.parentGInputSystem = this;
+        }
+
+        public gKeyboard getKeyboard() {
+            return this.keyboard;
+        }
+
+        public gInputSystem() {
+
+        }
+    }
+
     public static class gMouse {
+        private gInputSystem parentGInputSystem;
 
     }
 
     public static class gKeyboard implements KeyListener {
+        private gInputSystem parentGInputSystem;
+
         public gKeyboard() {
 
         }
@@ -18,23 +49,23 @@ public class inputSystem {
         }
 
         public synchronized void keyPressed(KeyEvent e) {
+            impulse i = parentGInputSystem.bindings.get(e.getKeyCode());
 
+            if(i != null) i.keyPressed();
         }
 
         public synchronized void keyReleased(KeyEvent e) {
+            impulse i = parentGInputSystem.bindings.get(e.getKeyCode());
 
+            if(i != null) i.keyReleased();
         }
     }
 
-    // TODO: map of bindings from string -> binding
+    public static class impulse {
+        public impulse() {
 
-    public class binding {
-        private int keyCode;
-        private consoleSystem.gConsoleCommand command;
-        private impulse impulse;
-    }
+        }
 
-    public class impulse {
         public void keyPressed() {
 
         }

@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.util.Arrays;
 
 public class fileSystem implements fileSystemI {
+    // TODO: maybe flatten directories on intialization
+    //  e.g. map(fullpath, gFile) only, no middle-man directories
+
     public static class gFile implements fileSystemI.gFile {
         private File file;
         private String name;

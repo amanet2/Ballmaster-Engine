@@ -51,12 +51,24 @@ public class consoleSystem implements consoleSystemI {
         }
 
         public String execCfgFile(gFile file) {
-            // TODO: apply lexing & parsing so comments '#' can be anywhere in the line
             for(String line : file.getFileLines()) {
-                if(!line.trim().startsWith((";")) || !line.trim().startsWith("#")) {
-                    System.out.println("% " + line);
-                    System.out.println(this.readLine(line));
+                String[] tokens = line.split(" ");
+
+                StringBuilder execLineBuilder = new StringBuilder("");
+                for(String token : tokens) {
+                    String trimmed = token.trim();
+
+                    if(trimmed.isEmpty()) continue;
+                    if(trimmed.startsWith(";") || trimmed.startsWith("#")) break;
+
+                    execLineBuilder.append(" ").append(trimmed);
                 }
+                String execLine = execLineBuilder.toString().trim();
+
+                if(execLine.isEmpty()) continue;
+
+                System.out.println("% " + execLine);
+                System.out.println(this.readLine(execLine));
             }
             return "";
         }

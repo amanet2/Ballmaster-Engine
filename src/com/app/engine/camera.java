@@ -2,6 +2,7 @@ package com.app.engine;
 
 public class camera implements cameraI {
     private double[] coords = new double[]{0.0, 0.0};
+    private double[] vec = new double[]{0.0, 0.0};
     private double zoom = 1.0;
 
     public camera() {
@@ -22,6 +23,14 @@ public class camera implements cameraI {
 
     public double[] getCoords() {
         return this.coords;
+    }
+
+    public void setVec(double[] vec) {
+        this.vec = vec;
+    }
+
+    public double[] getVec() {
+        return this.vec;
     }
 }
 

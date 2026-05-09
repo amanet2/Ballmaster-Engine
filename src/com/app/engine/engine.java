@@ -4,17 +4,14 @@ import com.app.engine.consoleSystem.gConsoleCommand;
 import com.app.engine.consoleSystem.gConsoleSystem;
 import com.app.engine.cVarSystem.gCVarSystem;
 import com.app.engine.graphicsSystem.gGraphicsSystem;
-import com.app.engine.inputSystem.gKeyboard;
-import com.app.engine.inputSystem.gMouse;
 import com.app.engine.schedulerSystem.gSchedulerSystem;
 import com.app.engine.fileSystem.gBaseFileSystem;
 import com.app.engine.fileSystem.gFile;
+import com.app.engine.inputSystem.gInputSystem;
 
 import java.util.Arrays;
 
 public class engine {
-    public static boolean showMetricsVideo = false;
-
     private static engine instance;
 
     public static engine instance() {
@@ -31,7 +28,7 @@ public class engine {
 
     // wrapper for multiple-instance class
     public gBaseFileSystem gBaseFileSystem;
-
+    public gInputSystem gInputSystem;
     public gGraphicsSystem gGraphicsSystem;
 
     // singleton
@@ -51,6 +48,7 @@ public class engine {
 
         this.gSchedulerSystem = new gSchedulerSystem();
 
+        this.gInputSystem = new gInputSystem();
 
         this.utils = new utils();
 
@@ -60,7 +58,6 @@ public class engine {
     }
 
     private void registerDefaultCmds() {
-        // TODO: make gameFiles-related commands (commented below) work at engine level (fix paths n stuff)
         gConsoleCommand gConsoleCommandClear = new gConsoleCommand("clears the console") {
             @Override
             public String doCommand(String[] args) {
@@ -137,7 +134,7 @@ public class engine {
                 return gCVarSystem.getCVarValue(args[0]);
             }
         };
-        gConsoleCommand gConsoleCommandListFiles = new gConsoleCommand("lists cfg files") {
+        gConsoleCommand gConsoleCommandListFilesCfg = new gConsoleCommand("lists cfg files") {
             @Override
             public String doCommand(String[] args) {
                 return "coming soon";
@@ -174,7 +171,7 @@ public class engine {
         gConsoleSystem.registerCmd("exit", gConsoleCommandQuit);
         gConsoleSystem.registerCmd("listCmds", gConsoleCommandListCmds);
         gConsoleSystem.registerCmd("listCVars", gConsoleCommandListCVars);
-        gConsoleSystem.registerCmd("listFilesCfg", gConsoleCommandListFiles);
+        gConsoleSystem.registerCmd("listFilesCfg", gConsoleCommandListFilesCfg);
         gConsoleSystem.registerCmd("listFilesScripts", gConsoleCommandListFilesScripts);
         gConsoleSystem.registerCmd("listFilesSprites", gConsoleCommandListSprites);
         gConsoleSystem.registerCmd("quit", gConsoleCommandQuit);
@@ -208,13 +205,6 @@ public class engine {
             }
         };
 
-//        gCVarSystem.registerCVar("cam_xy", cVarCamXY);
-//        gCVarSystem.registerCVar("cam_zoom", cVarCamZoon);
-//        gCVarSystem.registerCVar("com_showcamerainfo", cVarShowCamInfo);
-//        gCVarSystem.registerCVar("com_showframeinfo", cVarShowFrameInfo);
-//        gCVarSystem.registerCVar("com_showtimeelapsed", cVarComShowTimeElapsed);
-//        gCVarSystem.registerCVar("fs_spritespath", cVarFsSpriteFilesPath);
-//        gCVarSystem.registerCVar("fs_cfgpath", cVarFsCfgFilesPath);
         gCVarSystem.registerCVar("r_fullscreen", cVarRFullscreen);
         gCVarSystem.registerCVar("r_window_dims", cVarWindowDims);
         gCVarSystem.registerCVar("r_render_dims", cVarRenderDims);
