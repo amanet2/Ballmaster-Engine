@@ -7,7 +7,6 @@ import com.app.engine.graphicsSystem.gGraphicsSystem;
 import com.app.engine.inputSystem.gKeyboard;
 import com.app.engine.inputSystem.gMouse;
 import com.app.engine.schedulerSystem.gSchedulerSystem;
-import com.app.engine.spriteSystem.gSpriteSystem;
 
 import java.util.Arrays;
 
@@ -31,7 +30,6 @@ public class engine {
     // wrapper for multiple-instance class
     public fileSystem fileSystem;
 
-    // TODO: we want picture-in-picture so maybe a single Frame and Panel is not the best choice
     public gGraphicsSystem gGraphicsSystem;
 
     // singletons
@@ -40,9 +38,6 @@ public class engine {
 
     // singleton
     public gSchedulerSystem gSchedulerSystem;
-
-    // singleton
-    public gSpriteSystem gSpriteSystem;
 
     // wrapper for multiple-instance class
     public utils utils;
@@ -61,7 +56,6 @@ public class engine {
 
         this.gSchedulerSystem = new gSchedulerSystem();
 
-        this.gSpriteSystem = new gSpriteSystem();
 
         this.utils = new utils();
 

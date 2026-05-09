@@ -1,7 +1,6 @@
 package com.app.engine;
 
-import java.awt.Graphics;
-import java.util.HashMap;
+import java.awt.*;
 
 public interface graphicsSystemI {
     interface gCanvas {
@@ -26,8 +25,17 @@ public interface graphicsSystemI {
         int getWindowW();
         int getWindowH();
 
-        void setCameraTransform(camera c);
+        void setCameraTransform(camera c, boolean resetTransform);
 
-        HashMap<String, Number> getVideoMetrics();
+        String[] getVideoMetrics();
+    }
+
+    interface gSprite {
+        Image getImage();
+        void draw(Graphics g, int x, int y);
+    }
+
+    interface gSpriteSystem {
+        gSprite getScaledSprite(String name, int width, int height);
     }
 }

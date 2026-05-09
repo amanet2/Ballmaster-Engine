@@ -1,6 +1,6 @@
 package com.app.engine;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
@@ -13,8 +13,7 @@ public class graphicsSystem implements graphicsSystemI {
         private gGraphicsSystem parentGGraphicsSystem;
         private BufferedImage view;
         private Graphics graphics;
-        private AffineTransform savedTransform;
-        private boolean restoreTransform;
+        private AffineTransform originalTransform;
 
         public void init() {
             view = new BufferedImage(
@@ -38,8 +37,7 @@ public class graphicsSystem implements graphicsSystemI {
 
         public void clear() {
             Graphics g = this.getGraphics();
-            this.savedTransform = ((Graphics2D) g).getTransform();
-            restoreTransform = false;
+            this.originalTransform = ((Graphics2D) g).getTransform();
 
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, parentGGraphicsSystem.getRenderW(), parentGGraphicsSystem.getRenderH());
@@ -84,11 +82,8 @@ public class graphicsSystem implements graphicsSystemI {
             ((Graphics2D) g).scale(scaleFactor, scaleFactor);
         }
 
-        public void setCameraTransform(camera c) {
-            if (restoreTransform)
-                restoreTransform();
-            else
-                restoreTransform = true;
+        public void setCameraTransform(camera c, boolean resetTransform) {
+            if (resetTransform) resetTransform();
 
             Graphics g = this.getGraphics();
 
@@ -101,10 +96,10 @@ public class graphicsSystem implements graphicsSystemI {
             ((Graphics2D) g).scale(cameraZoom, cameraZoom);
         }
 
-        private void restoreTransform() {
+        private void resetTransform() {
             Graphics g = this.getGraphics();
 
-            ((Graphics2D) g).setTransform(this.savedTransform);
+            ((Graphics2D) g).setTransform(this.originalTransform);
             this.scaleToScreen();
         }
     }
@@ -112,6 +107,7 @@ public class graphicsSystem implements graphicsSystemI {
     public static class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
         private JFrame frame;
         private gCanvas canvas;
+        private gSpriteSystem spriteSystem;
 
         private boolean fullscreen = false;
         private int[] renderDims = { 640, 480 };
@@ -171,20 +167,16 @@ public class graphicsSystem implements graphicsSystemI {
             return this.windowDims[1];
         }
 
-        public HashMap<String, Number> getVideoMetrics() {
-            return new HashMap<>(
-                    Map.of(
-                            "videoRenderW", this.getRenderW(),
-                            "videoRenderH", this.getRenderH(),
-                            "videoWindowW", this.getWindowW(),
-                            "videoWindowH", this.getWindowH(),
-                            "videoFramesPerSecondMetricSnapshot", videoFramesPerSecondMetricSnapshot,
-                            "videoFrames", videoFrames,
-                            "videoFrametimeMetricSnapshotAvg", videoFrametimeMetricSnapshotAvg,
-                            "videoFrametimeMetricSnapshotLowest", videoFrametimeMetricSnapshotLowest,
-                            "videoFrametimeMetricSnapshotHighest", videoFrametimeMetricSnapshotHighest
-                    )
-            );
+        public String[] getVideoMetrics() {
+            return new String[] {
+                    "Video Render: [%d, %d]".formatted(this.getRenderW(), this.getRenderH()),
+                    "Video Window: [%d, %d]".formatted(this.getWindowW(), this.getWindowH()),
+                    "Video FPS: %d".formatted(videoFramesPerSecondMetricSnapshot),
+                    "Video Frames: %d".formatted(videoFrames),
+                    "Video Frametime Average: %fms".formatted(videoFrametimeMetricSnapshotAvg),
+                    "Video Frametime Lowest: %fms".formatted(videoFrametimeMetricSnapshotLowest),
+                    "Video Frametime Highest: %fms".formatted(videoFrametimeMetricSnapshotHighest)
+            };
         }
 
         private void setVideoMetrics() {
@@ -231,6 +223,8 @@ public class graphicsSystem implements graphicsSystemI {
             this.canvas = canvas;
             canvas.parentGGraphicsSystem = this;
 
+            spriteSystem = new gSpriteSystem();
+
             this.frame = new JFrame("Ballmaster Engine");
             this.frame.setLayout(new BorderLayout());
             this.frame.add(canvas, BorderLayout.CENTER);
@@ -259,12 +253,59 @@ public class graphicsSystem implements graphicsSystemI {
             this.canvas.render();
         }
 
-        public void setCameraTransform(camera c) {
-            this.canvas.setCameraTransform(c);
+        public void setCameraTransform(camera c, boolean resetTransform) {
+            this.canvas.setCameraTransform(c, resetTransform);
         }
 
         public Graphics getGraphics() {
             return this.canvas.getGraphics();
+        }
+
+        public gSpriteSystem getSpriteSystem() {
+            return this.spriteSystem;
+        }
+    }
+
+    public static class gSprite implements graphicsSystemI.gSprite {
+        private Image image;
+
+        public gSprite(Image image) {
+            this.image = image;
+        }
+
+        public Image getImage() {
+            return this.image;
+        }
+
+        public void draw(Graphics g, int x, int y) {
+            g.drawImage(getImage(), x, y,null);
+        }
+
+        public void draw(Graphics g, int x, int y, int w, int h) {
+            g.drawImage(getImage(), x, y, w, h, null);
+        }
+    }
+
+    public static class gSpriteSystem implements graphicsSystemI.gSpriteSystem {
+        private Map<String, ImageIcon> baseImages;
+        private HashMap<String, gSprite> scaledSprites;
+
+        public gSpriteSystem() {
+            this.baseImages = new HashMap<>();
+            this.scaledSprites = new HashMap<>();
+        }
+
+        public gSprite getScaledSprite(String path, int width, int height) {
+            if(path.equalsIgnoreCase("none"))
+                return null;
+
+            this.baseImages.putIfAbsent(path, new ImageIcon(path));
+
+            String name = String.format("%s%d%d", path, width, height);
+
+            this.scaledSprites.putIfAbsent(name, new gSprite(this.baseImages.get(path).getImage().getScaledInstance(width, height, Image.SCALE_FAST)));
+
+            return this.scaledSprites.get(name);
         }
     }
 }

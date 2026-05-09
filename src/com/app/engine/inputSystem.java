@@ -21,7 +21,7 @@ public class inputSystem implements inputSystemI {
         private HashMap<String, Integer> subKeyMap;
 
         public gKeyboard() {
-            this.inputPressQueue = new LinkedList<>();
+            this.inputPressQueue = new LinkedList<>(); // TODO: don't need this, it's already handled by Java
             this.inputReleaseQueue = new LinkedList<>();
             this.shiftMode = false;
             this.ctrlMode = false;
