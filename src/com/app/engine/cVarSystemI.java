@@ -15,7 +15,6 @@ public interface cVarSystemI {
         Set<String> keySet();
         String getCVarValue(String name);
         String setCVarValue(String name, String value);
-        void parseArgs(String[] args);
         gDict toDict();
         String[] getCVarList();
     }

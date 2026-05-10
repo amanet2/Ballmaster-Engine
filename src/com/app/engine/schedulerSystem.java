@@ -6,20 +6,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.app.engine.event;
+
 public class schedulerSystem implements schedulerSystemI {
-    public static class gSchedulerEvent implements schedulerSystemI.gSchedulerEvent {
-        public gSchedulerEvent() {
-
-        }
-
-        public void doEvent() {
-
-        }
-    }
-
     public static class gSchedulerSystem implements schedulerSystemI.gSchedulerSystem {
-        private ConcurrentHashMap<Long, Queue<gSchedulerEvent>> events;
-        private ConcurrentLinkedQueue<gSchedulerEvent> doNowEventsQueue;
+        private ConcurrentHashMap<Long, Queue<event>> events;
+        private ConcurrentLinkedQueue<event> doNowEventsQueue;
 
         public gSchedulerSystem() {
             this.events = new ConcurrentHashMap<>();
@@ -29,8 +21,7 @@ public class schedulerSystem implements schedulerSystemI {
         public synchronized void doEvents(long gameTime) {
             ArrayList<Long> toRemoveIds = new ArrayList<>();
             for (Long eventDoAtTime : this.events.keySet()) {
-                if (eventDoAtTime > gameTime)
-                    continue;
+                if (eventDoAtTime > gameTime) continue;
                 this.doNowEventsQueue.addAll(this.events.get(eventDoAtTime));
                 toRemoveIds.add(eventDoAtTime);
             }
@@ -38,13 +29,12 @@ public class schedulerSystem implements schedulerSystemI {
                 this.events.remove(timeStampKey);
             }
             while (!this.doNowEventsQueue.isEmpty()) {
-                gSchedulerEvent event = this.doNowEventsQueue.remove();
-                if(event != null)
-                    event.doEvent();
+                event event = this.doNowEventsQueue.remove();
+                if(event != null) event.doEvent();
             }
         }
 
-        public synchronized void addEvent(Long eventDoAtTime, gSchedulerEvent event) {
+        public synchronized void addEvent(Long eventDoAtTime, event event) {
             this.events.putIfAbsent(eventDoAtTime, new LinkedList<>());
             this.events.get(eventDoAtTime).add(event);
         }

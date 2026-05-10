@@ -73,6 +73,16 @@ public class consoleSystem implements consoleSystemI {
             return "";
         }
 
+        public void parseLaunchArgs(String[] args) {
+            String combinedArgs = String.join(" ", args);
+            String[] splitArgs = combinedArgs.split("\\+");
+            for(String splitArg : splitArgs) {
+                String trimmedSplitArg = splitArg.trim();
+                if(trimmedSplitArg.isEmpty()) continue;
+                this.readLine(trimmedSplitArg);
+            }
+        }
+
         public void registerCmd(String name, gConsoleCommand command) {
             commands.put(name, command);
         }

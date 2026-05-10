@@ -11,5 +11,6 @@ public interface consoleSystemI {
         gConsoleCommand getCmd(String name);
         void registerCmd(String name, consoleSystem.gConsoleCommand command);
         String[] listCmds();
+        void parseLaunchArgs(String[] args);
     }
 }

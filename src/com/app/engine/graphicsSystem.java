@@ -6,7 +6,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.Map;
 
 public class graphicsSystem implements graphicsSystemI {
     public static class gCanvas extends Canvas implements graphicsSystemI.gCanvas {

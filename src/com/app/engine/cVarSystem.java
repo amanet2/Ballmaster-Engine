@@ -75,23 +75,6 @@ public class cVarSystem implements cVarSystemI {
             return this.keySet().toArray(new String[0]);
         }
 
-        // TODO: figure out if we will always parse pairs of cvar args or also parse launch flags like -nosound
-        public void parseArgs(String[] args) {
-            System.out.println("Parsing arguments: " + Arrays.toString(args));
-            for(int i = 0; i < args.length; i++) {
-                if(getCVarValue(args[i]) == null)
-                    System.out.printf("No cvar found for '%s'%n", args[i]);
-                else {
-                    if(args.length > i+1) {
-                        System.out.println(setCVarValue(args[i], args[i + 1]));
-                        i += 1;
-                    }
-                    else
-                        System.out.printf("No value found for cvar '%s'%n", args[i]);
-                }
-            }
-        }
-
         public gDict toDict() {
             gDict dict = new gDict();
             for(String k : keySet()) {
