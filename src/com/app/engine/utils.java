@@ -167,4 +167,52 @@ public class utils {
             return Math.round((float) val /nearest) * nearest;
         }
     }
+
+    public static class gBounds {
+        private double[] bounds;
+
+        public gBounds(double[] bounds) {
+            this.setBounds(bounds);
+        }
+
+        public void setBounds(double[] bounds) {
+            this.bounds = bounds;
+        }
+
+        public double[] getBounds() {
+            return this.bounds;
+        }
+
+        public double getX() {
+            return this.getBounds()[0];
+        }
+
+        public double setX(double x) {
+            return this.getBounds()[0] = x;
+        }
+
+        public double getY() {
+            return this.getBounds()[1];
+        }
+
+        public double setY(double y) {
+            return this.getBounds()[1] = y;
+        }
+
+        public double getWidth() {
+            return this.getBounds()[2];
+        }
+
+        public double setWidth(double width) {
+            return this.getBounds()[2] = width;
+        }
+
+        public double getHeight() {
+            return this.getBounds()[3];
+        }
+
+        public double setHeight(double height) {
+            return this.getBounds()[3] = height;
+        }
+    }
 }

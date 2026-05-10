@@ -6,12 +6,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.app.engine.event;
+import com.app.engine.eventSystem.gEvent;
 
 public class schedulerSystem implements schedulerSystemI {
     public static class gSchedulerSystem implements schedulerSystemI.gSchedulerSystem {
-        private ConcurrentHashMap<Long, Queue<event>> events;
-        private ConcurrentLinkedQueue<event> doNowEventsQueue;
+        private ConcurrentHashMap<Long, Queue<gEvent>> events;
+        private ConcurrentLinkedQueue<gEvent> doNowEventsQueue;
 
         public gSchedulerSystem() {
             this.events = new ConcurrentHashMap<>();
@@ -29,12 +29,12 @@ public class schedulerSystem implements schedulerSystemI {
                 this.events.remove(timeStampKey);
             }
             while (!this.doNowEventsQueue.isEmpty()) {
-                event event = this.doNowEventsQueue.remove();
+                gEvent event = this.doNowEventsQueue.remove();
                 if(event != null) event.doEvent();
             }
         }
 
-        public synchronized void addEvent(Long eventDoAtTime, event event) {
+        public synchronized void addEvent(Long eventDoAtTime, gEvent event) {
             this.events.putIfAbsent(eventDoAtTime, new LinkedList<>());
             this.events.get(eventDoAtTime).add(event);
         }
