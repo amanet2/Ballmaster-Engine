@@ -1,16 +1,25 @@
 package com.app.engine;
 
-import java.awt.*;
+import java.awt.Graphics;
+
 import com.app.engine.graphicsSystem.gSprite;
+import com.app.engine.utils.gBounds;
 
 public class entity implements entityI {
     private gSprite sprite;
-    private double[] coords;
-    private double[] dims;
+    private gBounds bounds;
     private double[] vec;
 
     public entity() {
 
+    }
+
+    public void setBounds(gBounds bounds) {
+        this.bounds = bounds;
+    }
+
+    public gBounds getBounds() {
+        return this.bounds;
     }
 
     public gSprite getSprite() {
@@ -24,23 +33,11 @@ public class entity implements entityI {
     public void draw(Graphics g) {
         this.getSprite().draw(
                 g,
-                (int) (this.coords[0] - this.dims[0]/2.0),
-                (int) (this.coords[1] - this.dims[1]/2.0),
-                (int) this.dims[0],
-                (int) this.dims[1]
+                (int) (this.getBounds().getX() - this.getBounds().getWidth()/2.0),
+                (int) (this.getBounds().getY() - this.getBounds().getHeight()/2.0),
+                (int) this.getBounds().getWidth(),
+                (int) this.getBounds().getHeight()
         );
-    }
-
-    public double[] getDims() {
-        return this.dims;
-    }
-
-    public void setDims(double[] dims) {
-        this.dims = dims;
-    }
-
-    public double[] getCoords() {
-        return this.coords;
     }
 
     public double[] getVec() {
@@ -66,41 +63,4 @@ public class entity implements entityI {
     public void setDy(double dy) {
         this.vec[1] = dy;
     }
-
-    public void setCoords(double[] coords) {
-        this.coords = coords;
-    }
-
-    public double getX() {
-        return this.coords[0];
-    }
-
-    public double getY() {
-        return this.coords[1];
-    }
-
-    public double getW() {
-        return this.dims[0];
-    }
-
-    public double getH() {
-        return this.dims[1];
-    }
-
-    public void setX(double x) {
-        this.coords[0] = x;
-    }
-
-    public void setY(double y) {
-        this.coords[1] = y;
-    }
-
-    public void setW(double w) {
-        this.dims[0] = w;
-    }
-
-    public void setH(double h) {
-        this.dims[1] = h;
-    }
-
 }
