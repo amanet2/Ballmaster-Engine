@@ -214,5 +214,15 @@ public class utils {
         public double setHeight(double height) {
             return this.getBounds()[3] = height;
         }
+
+        public boolean intersects(gBounds bounds) {
+            if (this.getX() > bounds.getX() + bounds.getWidth() || bounds.getX() > this.getX() + this.getWidth())
+                return false;
+
+            if (this.getY() + this.getHeight() < bounds.getY() || bounds.getY() + bounds.getHeight() < this.getY())
+                return false;
+
+            return true;
+        }
     }
 }
