@@ -7,6 +7,8 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import com.app.engine.cameraSystem.gCamera;
+
 public class graphicsSystem implements graphicsSystemI {
     public static class gCanvas extends Canvas implements graphicsSystemI.gCanvas {
         private gGraphicsSystem parentGGraphicsSystem;
@@ -81,7 +83,7 @@ public class graphicsSystem implements graphicsSystemI {
             ((Graphics2D) g).scale(scaleFactor, scaleFactor);
         }
 
-        public void setCameraTransform(camera c, boolean resetTransform) {
+        public void setCameraTransform(gCamera c, boolean resetTransform) {
             if (resetTransform) resetTransform();
 
             Graphics g = this.getGraphics();
@@ -260,7 +262,7 @@ public class graphicsSystem implements graphicsSystemI {
             this.canvas.render();
         }
 
-        public void setCameraTransform(camera c, boolean resetTransform) {
+        public void setCameraTransform(gCamera c, boolean resetTransform) {
             this.canvas.setCameraTransform(c, resetTransform);
         }
 

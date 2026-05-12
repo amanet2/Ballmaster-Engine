@@ -2,6 +2,8 @@ package com.app.engine;
 
 import java.awt.*;
 
+import com.app.engine.cameraSystem.gCamera;
+
 public interface graphicsSystemI {
     interface gCanvas {
         void init();
@@ -25,7 +27,7 @@ public interface graphicsSystemI {
         int getWindowW();
         int getWindowH();
 
-        void setCameraTransform(camera c, boolean resetTransform);
+        void setCameraTransform(gCamera c, boolean resetTransform);
 
         String[] getVideoMetrics();
     }

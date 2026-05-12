@@ -5,15 +5,10 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 public class inputSystem {
-    public static class gInputSystem {
-        public HashMap<Integer, impulse> bindings = new HashMap<>();
-
+    public static class gInputSystem implements inputSystemI.gInputSystem {
         private gKeyboard keyboard;
         private gMouse mouse;
-
-        public void bind(Integer e, impulse i) {
-            bindings.put(e, i);
-        }
+        private HashMap<Integer, gImpulse> binds = new HashMap<>();
 
         public void init() {
             keyboard = new gKeyboard();
@@ -23,8 +18,20 @@ public class inputSystem {
             mouse.parentGInputSystem = this;
         }
 
+        public void setBind(Integer e, gImpulse i) {
+            binds.put(e, i);
+        }
+
+        public HashMap<Integer, gImpulse> getBinds() {
+            return this.binds;
+        }
+
         public gKeyboard getKeyboard() {
             return this.keyboard;
+        }
+
+        public gMouse getMouse() {
+            return this.mouse;
         }
 
         public gInputSystem() {
@@ -32,12 +39,7 @@ public class inputSystem {
         }
     }
 
-    public static class gMouse {
-        private gInputSystem parentGInputSystem;
-
-    }
-
-    public static class gKeyboard implements KeyListener {
+    public static class gKeyboard implements inputSystemI.gKeyboard, KeyListener {
         private gInputSystem parentGInputSystem;
 
         public gKeyboard() {
@@ -49,20 +51,25 @@ public class inputSystem {
         }
 
         public synchronized void keyPressed(KeyEvent e) {
-            impulse i = parentGInputSystem.bindings.get(e.getKeyCode());
+            gImpulse i = parentGInputSystem.binds.get(e.getKeyCode());
 
             if(i != null) i.keyPressed();
         }
 
         public synchronized void keyReleased(KeyEvent e) {
-            impulse i = parentGInputSystem.bindings.get(e.getKeyCode());
+            gImpulse i = parentGInputSystem.binds.get(e.getKeyCode());
 
             if(i != null) i.keyReleased();
         }
     }
 
-    public static class impulse {
-        public impulse() {
+    public static class gMouse implements inputSystemI.gMouse {
+        private gInputSystem parentGInputSystem;
+
+    }
+
+    public static class gImpulse implements inputSystemI.gImpulse {
+        public gImpulse() {
 
         }
 
