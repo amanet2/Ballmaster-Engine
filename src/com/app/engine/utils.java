@@ -15,6 +15,7 @@ public class utils {
     }
 
     public static class gDict {
+        //        String testString = "{foo=bar, baz={foo=bar, qaz={yaz=p\\}zaz}}, zaz={abz=bzaz}, laz=[1, 2, 3, 4]}";
         private HashMap<String, Object> internalMap;  // values can be String or gDict
         public static char escapeCharacter = '\\';
         private ArrayList<String> parsingTokens = new ArrayList<>();
