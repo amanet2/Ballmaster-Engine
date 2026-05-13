@@ -206,7 +206,7 @@ public class engine {
         };
 
         gCVarSystem.registerCVar("r_fullscreen", cVarRFullscreen);
-        gCVarSystem.registerCVar("r_window_dims", cVarWindowDims);
-        gCVarSystem.registerCVar("r_render_dims", cVarRenderDims);
+        gCVarSystem.registerCVar("r_windowDims", cVarWindowDims);
+        gCVarSystem.registerCVar("r_renderDims", cVarRenderDims);
     }
 }
