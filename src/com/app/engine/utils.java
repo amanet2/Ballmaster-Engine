@@ -27,6 +27,8 @@ public class utils {
 
         @SuppressWarnings("unchecked")
         public gDict(String dictString) {
+            dictString = dictString.replace(" ", "");
+            dictString = dictString.replace("\n", "");
             parsingTokens = lex(dictString);
             parsingIndex = 0;
             this.internalMap = (HashMap<String, Object>) parse();
