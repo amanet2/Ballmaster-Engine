@@ -27,6 +27,7 @@ public class utils {
 
         @SuppressWarnings("unchecked")
         public gDict(String dictString) {
+            // TODO: support whitespace without replacing it like this
             dictString = dictString.replace(" ", "");
             dictString = dictString.replace("\n", "");
             parsingTokens = lex(dictString);

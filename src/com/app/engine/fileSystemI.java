@@ -5,6 +5,7 @@ public interface fileSystemI {
         String getName();
         gDirectory getParentDirectory();
         String[] getFileLines();
+        String getFileString();
     }
 
     interface gDirectory {
@@ -24,5 +25,7 @@ public interface fileSystemI {
         gFileSystem getFileSystemScripts();
 
         gFileSystem getFileSystemSprites();
+
+        gFileSystem getFileSystemMaps();
     }
 }

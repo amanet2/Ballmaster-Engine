@@ -29,6 +29,15 @@ public class fileSystem implements fileSystemI {
             return new String[0];
         }
 
+        public String getFileString() {
+            try {
+                return Files.readString(this.file.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+
         public String getName() {
             return this.name;
         }
@@ -112,15 +121,18 @@ public class fileSystem implements fileSystemI {
         private static String pathConfig = getPath("config");
         private static String pathScripts = getPath("scripts");
         private static String pathSprites = getPath("data");
+        private static String pathMaps = getPath("map");
 
         private static gFileSystem fileSystemConfig;
         private static gFileSystem fileSystemScripts;
         private static gFileSystem fileSystemSprites;
+        private static gFileSystem fileSystemMaps;
 
         public gBaseFileSystem() {
             fileSystemConfig = new gFileSystem(pathConfig);
             fileSystemScripts = new gFileSystem(pathScripts);
             fileSystemSprites = new gFileSystem(pathSprites);
+            fileSystemMaps = new gFileSystem(pathMaps);
         }
 
         public static String getPath(String path) {
@@ -137,6 +149,10 @@ public class fileSystem implements fileSystemI {
 
         public gFileSystem getFileSystemSprites() {
             return fileSystemSprites;
+        }
+
+        public gFileSystem getFileSystemMaps() {
+            return fileSystemMaps;
         }
 
     }
