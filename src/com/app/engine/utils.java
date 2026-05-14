@@ -27,10 +27,14 @@ public class utils {
 
         @SuppressWarnings("unchecked")
         public gDict(String dictString) {
-            // TODO: support whitespace without replacing it like this
-            dictString = dictString.replace(" ", "");
+            // TODO: support whitespace without replacing it like this (spaces are good so far)
+//            dictString = dictString.replace(" ", "");
             dictString = dictString.replace("\n", "");
+
             parsingTokens = lex(dictString);
+
+            System.out.println(parsingTokens.toString());
+
             parsingIndex = 0;
             this.internalMap = (HashMap<String, Object>) parse();
         }
@@ -46,7 +50,9 @@ public class utils {
 
                 if(charAtPrevIndex != escapeCharacter && (importantChars.contains(charAtIndex))) {
                     if(!stringBuilder.isEmpty()) {
-                        lexedDictStringTokens.add(stringBuilder.toString().trim());
+                        String toAdd = stringBuilder.toString().trim();
+                        if(!toAdd.isEmpty())
+                            lexedDictStringTokens.add(toAdd);
                         stringBuilder = new StringBuilder();
                     }
                     lexedDictStringTokens.add(Character.toString(charAtIndex));
