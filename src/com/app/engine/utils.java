@@ -32,9 +32,6 @@ public class utils {
             dictString = dictString.replace("\n", "");
 
             parsingTokens = lex(dictString);
-
-            System.out.println(parsingTokens.toString());
-
             parsingIndex = 0;
             this.internalMap = (HashMap<String, Object>) parse();
         }
@@ -50,9 +47,8 @@ public class utils {
 
                 if(charAtPrevIndex != escapeCharacter && (importantChars.contains(charAtIndex))) {
                     if(!stringBuilder.isEmpty()) {
-                        String toAdd = stringBuilder.toString().trim();
-                        if(!toAdd.isEmpty())
-                            lexedDictStringTokens.add(toAdd);
+                        String trimmedString = stringBuilder.toString().trim();
+                        if(!trimmedString.isEmpty()) lexedDictStringTokens.add(trimmedString);
                         stringBuilder = new StringBuilder();
                     }
                     lexedDictStringTokens.add(Character.toString(charAtIndex));
