@@ -23,7 +23,6 @@ public interface fileSystemI {
     interface gBaseFileSystem {
         gFileSystem getFileSystemConfig();
 
-        gFileSystem getFileSystemScripts();
 
         gFileSystem getFileSystemSprites();
 

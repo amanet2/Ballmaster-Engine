@@ -140,12 +140,6 @@ public class engine {
                 return "coming soon";
             }
         };
-        gConsoleCommand gConsoleCommandListFilesScripts = new gConsoleCommand("lists script files") {
-            @Override
-            public String doCommand(String[] args) {
-                return "coming soon";
-            }
-        };
         gConsoleCommand gConsoleCommandListSprites = new gConsoleCommand("lists sprite files") {
             @Override
             public String doCommand(String[] args) {
@@ -172,7 +166,6 @@ public class engine {
         gConsoleSystem.registerCmd("listCmds", gConsoleCommandListCmds);
         gConsoleSystem.registerCmd("listCVars", gConsoleCommandListCVars);
         gConsoleSystem.registerCmd("listFilesCfg", gConsoleCommandListFilesCfg);
-        gConsoleSystem.registerCmd("listFilesScripts", gConsoleCommandListFilesScripts);
         gConsoleSystem.registerCmd("listFilesSprites", gConsoleCommandListSprites);
         gConsoleSystem.registerCmd("quit", gConsoleCommandQuit);
         gConsoleSystem.registerCmd("script", gConsoleCommandScript);
