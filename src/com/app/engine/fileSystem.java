@@ -122,17 +122,20 @@ public class fileSystem implements fileSystemI {
         private static String pathScripts = getPath("scripts");
         private static String pathSprites = getPath("data");
         private static String pathMaps = getPath("map");
+        private static String pathTextures = getPath("textures");
 
         private static gFileSystem fileSystemConfig;
         private static gFileSystem fileSystemScripts;
         private static gFileSystem fileSystemSprites;
         private static gFileSystem fileSystemMaps;
+        private static gFileSystem fileSystemTextures;
 
         public gBaseFileSystem() {
             fileSystemConfig = new gFileSystem(pathConfig);
             fileSystemScripts = new gFileSystem(pathScripts);
             fileSystemSprites = new gFileSystem(pathSprites);
             fileSystemMaps = new gFileSystem(pathMaps);
+            fileSystemTextures = new gFileSystem(pathTextures);
         }
 
         public static String getPath(String path) {
@@ -153,6 +156,10 @@ public class fileSystem implements fileSystemI {
 
         public gFileSystem getFileSystemMaps() {
             return fileSystemMaps;
+        }
+
+        public gFileSystem getFileSystemTextures() {
+            return fileSystemTextures;
         }
 
     }

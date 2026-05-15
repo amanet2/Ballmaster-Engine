@@ -40,4 +40,12 @@ public interface graphicsSystemI {
     interface gSpriteSystem {
         gSprite getSprite(String name);
     }
+
+    interface gTexture {
+        TexturePaint getTexturePaint();
+    }
+
+    interface gTextureSystem {
+        gTexture getTexture(String name);
+    }
 }

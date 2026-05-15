@@ -1,10 +1,14 @@
 package com.app.engine;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import com.app.engine.cameraSystem.gCamera;
@@ -108,7 +112,9 @@ public class graphicsSystem implements graphicsSystemI {
     public static class gGraphicsSystem implements graphicsSystemI.gGraphicsSystem {
         private JFrame frame;
         private gCanvas canvas;
+
         private gSpriteSystem spriteSystem;
+        private gTextureSystem textureSystem;
 
         private boolean fullscreen = false;
         private int[] renderDims = { 640, 480 };
@@ -225,6 +231,7 @@ public class graphicsSystem implements graphicsSystemI {
             canvas.parentGGraphicsSystem = this;
 
             spriteSystem = new gSpriteSystem();
+            textureSystem = new gTextureSystem();
 
             this.frame = new JFrame("Ballmaster Engine");
             this.frame.setLayout(new BorderLayout());
@@ -273,10 +280,14 @@ public class graphicsSystem implements graphicsSystemI {
         public gSpriteSystem getSpriteSystem() {
             return this.spriteSystem;
         }
+
+        public gTextureSystem getTextureSystem() {
+            return this.textureSystem;
+        }
     }
 
     public static class gSprite implements graphicsSystemI.gSprite {
-        private Image image;
+        private final Image image;
 
         public gSprite(Image image) {
             this.image = image;
@@ -297,19 +308,56 @@ public class graphicsSystem implements graphicsSystemI {
 
     public static class gSpriteSystem implements graphicsSystemI.gSpriteSystem {
         // TODO: use filesystem to get base files for sprites
-        private HashMap<String, gSprite> sprites;
+        private final HashMap<String, gSprite> sprites;
 
         public gSpriteSystem() {
             this.sprites = new HashMap<>();
         }
 
         public gSprite getSprite(String path) {
-            if(path.equalsIgnoreCase("none"))
-                return null;
-
             this.sprites.putIfAbsent(path, new gSprite(new ImageIcon(path).getImage()));
 
             return this.sprites.get(path);
+        }
+    }
+
+    public static class gTexture implements graphicsSystemI.gTexture {
+        private final TexturePaint texturePaint;
+        private double[] dims;
+
+        public gTexture(TexturePaint texturePaint) {
+            this.texturePaint = texturePaint;
+        }
+
+        public TexturePaint getTexturePaint() {
+            return this.texturePaint;
+        }
+    }
+
+    public static class gTextureSystem implements graphicsSystemI.gTextureSystem {
+        private final HashMap<String, gTexture> textures;
+        private final double dim = 64.0;
+
+        public gTextureSystem() {
+            textures = new HashMap<>();
+        }
+
+        public gTexture getTexture(String path) {
+            try {
+                this.textures.putIfAbsent(
+                        path,
+                        new gTexture(
+                                new TexturePaint(
+                                    ImageIO.read(new File(path)),
+                                    new Rectangle2D.Double(0,0, dim, dim)
+                            )
+                        )
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return this.textures.get(path);
         }
     }
 }

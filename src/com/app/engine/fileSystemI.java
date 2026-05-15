@@ -19,6 +19,7 @@ public interface fileSystemI {
         gDirectory getRootDirectory();
     }
 
+    // TODO: these should not be hard-coded in the engine
     interface gBaseFileSystem {
         gFileSystem getFileSystemConfig();
 
@@ -27,5 +28,7 @@ public interface fileSystemI {
         gFileSystem getFileSystemSprites();
 
         gFileSystem getFileSystemMaps();
+
+        gFileSystem getFileSystemTextures();
     }
 }
