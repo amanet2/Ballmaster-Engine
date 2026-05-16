@@ -17,7 +17,7 @@ public interface inputSystemI {
     }
 
     interface gMouse {
-
+        int[] getCoordinates();
     }
 
     interface gImpulse {

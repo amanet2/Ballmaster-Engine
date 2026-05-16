@@ -22,6 +22,7 @@ public interface graphicsSystemI {
         int getRenderW();
         int getRenderH();
 
+        int[] getWindowXY();
         void setWindowDims(int[] dims);
         int[] getWindowDims();
         int getWindowW();

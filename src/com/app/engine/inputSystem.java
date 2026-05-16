@@ -1,5 +1,6 @@
 package com.app.engine;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -66,6 +67,10 @@ public class inputSystem {
     public static class gMouse implements inputSystemI.gMouse {
         private gInputSystem parentGInputSystem;
 
+        public int[] getCoordinates() {
+            Point loc = MouseInfo.getPointerInfo().getLocation();
+            return new int[]{ loc.x, loc.y };
+        }
     }
 
     public static class gImpulse implements inputSystemI.gImpulse {

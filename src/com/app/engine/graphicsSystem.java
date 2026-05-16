@@ -158,6 +158,14 @@ public class graphicsSystem implements graphicsSystemI {
             return this.renderDims[1];
         }
 
+        public int[] getWindowXY() {
+            Rectangle frameBounds = this.frame.getBounds();
+            return new int[]{
+                    frameBounds.x,
+                    frameBounds.y + this.frame.getInsets().top
+            };
+        }
+
         public int[] getWindowDims() {
             return this.windowDims;
         }
@@ -175,9 +183,11 @@ public class graphicsSystem implements graphicsSystemI {
         }
 
         public String[] getVideoMetrics() {
+            int[] frameXY = this.getWindowXY();
             return new String[] {
                     "Video Render: [%d, %d]".formatted(this.getRenderW(), this.getRenderH()),
                     "Video Window: [%d, %d]".formatted(this.getWindowW(), this.getWindowH()),
+                    "Video Window XY: [%d, %d]".formatted(frameXY[0], frameXY[1]),
                     "Video FPS: %d".formatted(videoFramesPerSecondMetricSnapshot),
                     "Video Frames: %d".formatted(videoFrames),
                     "Video Frametime Average: %fms".formatted(videoFrametimeMetricSnapshotAvg),
