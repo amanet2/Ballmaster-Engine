@@ -1,6 +1,5 @@
 package com.app.engine;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
@@ -10,13 +9,19 @@ import com.app.engine.utils.gDict;
 public class cVarSystem implements cVarSystemI {
     public static class gCVar implements cVarSystemI.gCVar{
         private String value;
+        private String originalValue;
 
         public gCVar(String value) {
             this.value = value;
+            this.originalValue = this.value;
         }
 
         public String getValue() {
             return this.value;
+        }
+
+        public String getOriginalValue() {
+            return this.originalValue;
         }
 
         @Override
@@ -54,16 +59,16 @@ public class cVarSystem implements cVarSystemI {
         }
 
         @Override
-        public String setCVarValue(String name, String value) {
+        public String setCVarValue(String name, String value, boolean permanent) {
             gCVar cvar = this.internalMap.get(name);
             if(cvar == null)
                 return String.format("No cvar found for '%s'", name);
 
             String oldValue = cvar.value;
             cvar.value = value;
+            if (permanent) cvar.originalValue = value;
             cvar.onUpdate();
-            if(!oldValue.equals(cvar.value))
-                cvar.onChange();
+            if(!oldValue.equals(cvar.value)) cvar.onChange();
             return String.format("Set value of cvar '%s' to '%s'", name, value);
         }
 

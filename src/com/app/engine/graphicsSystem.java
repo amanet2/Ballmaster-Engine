@@ -161,7 +161,7 @@ public class graphicsSystem implements graphicsSystemI {
         public int[] getWindowXY() {
             Rectangle frameBounds = this.frame.getBounds();
             return new int[]{
-                    frameBounds.x,
+                    frameBounds.x + this.frame.getInsets().left,
                     frameBounds.y + this.frame.getInsets().top
             };
         }

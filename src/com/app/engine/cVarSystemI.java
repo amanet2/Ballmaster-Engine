@@ -14,7 +14,7 @@ public interface cVarSystemI {
         String registerCVar(String name, cVarSystem.gCVar cVar);
         Set<String> keySet();
         String getCVarValue(String name);
-        String setCVarValue(String name, String value);
+        String setCVarValue(String name, String value, boolean permanent);
         gDict toDict();
         String[] getCVarList();
     }
