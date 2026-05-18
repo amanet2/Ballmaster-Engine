@@ -2,6 +2,8 @@ package com.app.engine;
 
 import com.app.engine.utils.gBounds;
 
+import java.awt.Graphics;
+
 public class eventSystem {
     public static class gEvent implements eventSystemI.gEvent {
         private gEventTrigger parentEventTrigger;
@@ -16,6 +18,31 @@ public class eventSystem {
 
         public gEventTrigger getParentEventTrigger() {
             return this.parentEventTrigger;
+        }
+    }
+
+    public static class gEventGraphics extends gEvent implements eventSystemI.gEventGraphics {
+        private long doAtTimeMillis;
+        private long timeToLiveMillis;
+
+        public long getDoAtTimeMillis() {
+            return this.doAtTimeMillis;
+        }
+
+        public void setDoAtTimeMillis(long doAtTimeMillis) {
+            this.doAtTimeMillis = doAtTimeMillis;
+        }
+
+        public void setTimeToLiveMillis(long timeToLive) {
+            this.timeToLiveMillis = timeToLive;
+        }
+
+        public long getTimeToLiveMillis() {
+            return this.timeToLiveMillis;
+        }
+
+        public void doEvent(Graphics g) {
+            // to be overwritten
         }
     }
 

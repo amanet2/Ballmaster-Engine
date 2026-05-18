@@ -1,5 +1,7 @@
 package com.app.engine;
 
+import java.awt.Graphics;
+
 import com.app.engine.utils.gBounds;
 
 public interface eventSystemI {
@@ -7,6 +9,14 @@ public interface eventSystemI {
         void doEvent();
         void setParentEventTrigger(eventSystem.gEventTrigger eventTrigger);
         eventSystem.gEventTrigger getParentEventTrigger();
+    }
+
+    interface gEventGraphics {
+        void doEvent(Graphics g);
+        long getDoAtTimeMillis();
+        void setDoAtTimeMillis(long doAtTimeMillis);
+        long getTimeToLiveMillis();
+        void setTimeToLiveMillis(long ttl);
     }
 
     interface gEventTrigger {
