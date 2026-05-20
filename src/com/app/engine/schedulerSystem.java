@@ -38,20 +38,23 @@ public class schedulerSystem implements schedulerSystemI {
         }
 
         public void doEventsGraphics(long gameTime, Graphics g) {
-            ArrayList<Integer> toDoEventIndexes = new ArrayList<>();
-            ArrayList<Integer> toRemoveEventsIndexes = new ArrayList<>();
+            Queue<gEventGraphics> toDo = new LinkedList<>();
+            Queue<gEventGraphics> toRemove = new LinkedList<>();
 
             long currentTimeMillis = System.currentTimeMillis();
 
-            for(int i = 0; i < eventsGraphics.size(); i++) {
-                gEventGraphics event = eventsGraphics.get(i);
+            for(gEventGraphics event : eventsGraphics) {
                 if (currentTimeMillis > event.getDoAtTimeMillis() + event.getTimeToLiveMillis())
-                    toRemoveEventsIndexes.add(i);
-                if(currentTimeMillis > event.getDoAtTimeMillis()) event.doEvent(g);
+                    toRemove.add(event);
+                else if(currentTimeMillis > event.getDoAtTimeMillis()) toDo.add(event);
             }
 
-            for(int i = 0; i < toRemoveEventsIndexes.size(); i++) {
-                eventsGraphics.remove(i);
+            while(!toDo.isEmpty()) {
+                toDo.remove().doEvent(g);
+            }
+
+            while(!toRemove.isEmpty()) {
+                eventsGraphics.remove(toRemove.remove());
             }
         }
 
